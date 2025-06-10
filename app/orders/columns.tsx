@@ -11,6 +11,44 @@ export type Order = {
   name: string;
   note: string;
   createdAt: string;
+  customer: {
+    id: string;
+    firstName: string;
+    lastName: string;
+  };
+  currentTotalPriceSet: {
+    presentmentMoney: {
+      amount: number;
+      currencyCode: string;
+    };
+  };
+  displayFinancialStatus:
+    | "AUTHORIZED"
+    | "PAID"
+    | "PARTIALLY_PAID"
+    | "PARTIALLY_REFUNDED"
+    | "PENDING"
+    | "REFUNDED"
+    | "VOIDED";
+  displayFulfillmentStatus:
+    | "FULFILLED"
+    | "IN_PROGRESS"
+    | "ON_HOLD"
+    | "OPEN"
+    | "PARTIALLY_FULFILLED"
+    | "PENDING_FULFILLMENT"
+    | "REQUEST_DECLINED"
+    | "RESTOCKED"
+    | "SCHEDULED"
+    | "UNFULFILLED";
+  lineItems: {
+    edges: {
+      node: {
+        id: string;
+        name: string;
+      };
+    }[];
+  };
 };
 
 export const columns: ColumnDef<Order>[] = [
@@ -64,6 +102,63 @@ export const columns: ColumnDef<Order>[] = [
         month: "2-digit",
         day: "2-digit",
       });
+    },
+  },
+  {
+    accessorKey: "customer",
+    header: "Customer",
+    cell: ({ row }) => {
+      const customer = row.original.customer;
+      return (
+        <div>
+          {customer.firstName} {customer.lastName}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "currentTotalPriceSet",
+    header: "Total Price",
+    cell: ({ row }) => {
+      const { amount, currencyCode } =
+        row.original.currentTotalPriceSet.presentmentMoney;
+
+      return (
+        <div>
+          {new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: currencyCode,
+          }).format(amount)}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "displayFinancialStatus",
+    header: "Financial Status",
+    cell: ({ row }) => {
+      const status = row.original.displayFinancialStatus;
+      return <div>{status}</div>;
+    },
+  },
+  {
+    accessorKey: "displayFulfillmentStatus",
+    header: "Fulfillment Status",
+    cell: ({ row }) => {
+      const status = row.original.displayFulfillmentStatus;
+      return <div>{status}</div>;
+    },
+  },
+  {
+    accessorKey: "lineItems",
+    header: "Items",
+    cell: ({ row }) => {
+      const lineItems = row.original.lineItems.edges.length;
+      return (
+        <div>
+          {lineItems} item{lineItems !== 1 ? "s" : ""}
+        </div>
+      );
     },
   },
   {
