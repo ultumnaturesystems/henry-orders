@@ -1,5 +1,5 @@
 import { fetchOrders } from "./actions";
-import { Order } from "./columns";
+import { Order } from "@/utils/shopify/types";
 import Orders from "./Orders";
 
 const OrdersPage = async () => {

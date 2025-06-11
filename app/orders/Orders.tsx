@@ -2,7 +2,8 @@
 
 import { DataTable } from "@/components/data-table/data-table";
 import { Input } from "@/components/ui/input";
-import { columns, Order } from "./columns";
+import { columns } from "./columns";
+import { Order } from "@/utils/shopify/types";
 import { useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
 

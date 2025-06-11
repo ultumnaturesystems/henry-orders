@@ -5,54 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
+import {
+  Order,
+  financialStatusVariant,
+  fulfillmentStatusVariant,
+} from "@/utils/shopify/types";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Order = {
-  id: string;
-  name: string;
-  note: string;
-  createdAt: string;
-  customer: {
-    id: string;
-    firstName: string;
-    lastName: string;
-  };
-  currentTotalPriceSet: {
-    presentmentMoney: {
-      amount: number;
-      currencyCode: string;
-    };
-  };
-  displayFinancialStatus:
-    | "AUTHORIZED"
-    | "PAID"
-    | "PARTIALLY_PAID"
-    | "PARTIALLY_REFUNDED"
-    | "PENDING"
-    | "REFUNDED"
-    | "VOIDED";
-  displayFulfillmentStatus:
-    | "FULFILLED"
-    | "IN_PROGRESS"
-    | "ON_HOLD"
-    | "OPEN"
-    | "PARTIALLY_FULFILLED"
-    | "PENDING_FULFILLMENT"
-    | "REQUEST_DECLINED"
-    | "RESTOCKED"
-    | "SCHEDULED"
-    | "UNFULFILLED";
-  lineItems: {
-    edges: {
-      node: {
-        id: string;
-        name: string;
-      };
-    }[];
-  };
-  tags: string[];
-};
 
 export const columns: ColumnDef<Order>[] = [
   {
@@ -87,8 +47,7 @@ export const columns: ColumnDef<Order>[] = [
       return (
         <div>
           <Link
-            href={`https://admin.shopify.com/store/ultumnaturesystems/orders/${orderId}`}
-            target="_blank"
+            href={`/orders/${orderId}`}
             style={{ textDecoration: "underline", color: "black" }}
           >
             {cell.getValue<string>()}
@@ -150,36 +109,10 @@ export const columns: ColumnDef<Order>[] = [
     cell: ({ row }) => {
       const status = row.original.displayFinancialStatus;
 
-      // Map status to shadcn badge variants
-      const statusVariant: Record<
-        string,
-        { label: string; backgroundColor: string }
-      > = {
-        PAID: { label: "Paid", backgroundColor: "" },
-        PARTIALLY_PAID: {
-          label: "Partially Paid",
-          backgroundColor: "rgba(255, 214, 164, 1)",
-        },
-        AUTHORIZED: {
-          label: "Authorized",
-          backgroundColor: "rgba(255, 235, 120, 1)",
-        },
-        PENDING: {
-          label: "Payment Pending",
-          backgroundColor: "rgba(255, 214, 164, 1)",
-        },
-        PARTIALLY_REFUNDED: {
-          label: "Partially Refunded",
-          backgroundColor: "",
-        },
-        REFUNDED: { label: "Refunded", backgroundColor: "" },
-        VOIDED: { label: "Voided", backgroundColor: "" },
-      };
-
       return (
         <div>
-          <Badge variant={"secondary"} style={statusVariant[status]}>
-            {statusVariant[status]?.label || status}
+          <Badge variant={"secondary"} style={financialStatusVariant[status]}>
+            {financialStatusVariant[status]?.label || status}
           </Badge>
         </div>
       );
@@ -194,42 +127,6 @@ export const columns: ColumnDef<Order>[] = [
     },
     cell: ({ row }) => {
       const fulfillmentStatus = row.original.displayFulfillmentStatus;
-      const fulfillmentStatusVariant: Record<
-        typeof fulfillmentStatus,
-        { label: string; backgroundColor: string }
-      > = {
-        FULFILLED: { label: "Fulfilled", backgroundColor: "" },
-        PARTIALLY_FULFILLED: {
-          label: "Partially Fulfilled",
-          backgroundColor: "rgba(255, 214, 164, 1)",
-        },
-        UNFULFILLED: {
-          label: "Unfulfilled",
-          backgroundColor: "rgba(255, 235, 120, 1)",
-        },
-        SCHEDULED: {
-          label: "Scheduled",
-          backgroundColor: "",
-        },
-        ON_HOLD: {
-          label: "On Hold",
-          backgroundColor: "",
-        },
-        RESTOCKED: { label: "Restocked", backgroundColor: "" },
-        REQUEST_DECLINED: { label: "Request Declined", backgroundColor: "" },
-        PENDING_FULFILLMENT: {
-          label: "Pending Fulfillment",
-          backgroundColor: "",
-        },
-        IN_PROGRESS: {
-          label: "In Progress",
-          backgroundColor: "",
-        },
-        OPEN: {
-          label: "Open",
-          backgroundColor: "",
-        },
-      };
       return (
         <div>
           <Badge
