@@ -12,7 +12,7 @@ export async function fetchOrders() {
   try {
     const operation = `
             query {
-                orders(first: 25, query: "tag:'Henry'", sortKey: CREATED_AT, reverse: true) {
+                orders(first: 75, query: "tag:'Henry'", sortKey: CREATED_AT, reverse: true) {
                     edges{
                         node{
                             id
@@ -40,6 +40,7 @@ export async function fetchOrders() {
                                     }
                                 }
                             }
+                            tags
                         }
                     }
                 }

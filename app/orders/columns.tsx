@@ -1,5 +1,7 @@
 "use client";
 
+import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
+import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
@@ -49,6 +51,7 @@ export type Order = {
       };
     }[];
   };
+  tags: string[];
 };
 
 export const columns: ColumnDef<Order>[] = [
@@ -76,7 +79,9 @@ export const columns: ColumnDef<Order>[] = [
   },
   {
     accessorKey: "name",
-    header: "Name",
+    header: ({ column }) => {
+      return <DataTableColumnHeader column={column} title="Name" />;
+    },
     cell: ({ cell, row }) => {
       const orderId = row.original.id.replace("gid://shopify/Order/", "");
       return (
@@ -94,7 +99,9 @@ export const columns: ColumnDef<Order>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Created At",
+    header: ({ column }) => {
+      return <DataTableColumnHeader column={column} title="Created At" />;
+    },
     cell: ({ row }) => {
       const date = new Date(row.getValue("createdAt"));
       return date.toLocaleDateString("en-US", {
@@ -118,7 +125,9 @@ export const columns: ColumnDef<Order>[] = [
   },
   {
     accessorKey: "currentTotalPriceSet",
-    header: "Total Price",
+    header: ({ column }) => {
+      return <DataTableColumnHeader column={column} title="Total Price" />;
+    },
     cell: ({ row }) => {
       const { amount, currencyCode } =
         row.original.currentTotalPriceSet.presentmentMoney;
@@ -135,23 +144,110 @@ export const columns: ColumnDef<Order>[] = [
   },
   {
     accessorKey: "displayFinancialStatus",
-    header: "Financial Status",
+    header: ({ column }) => {
+      return <DataTableColumnHeader column={column} title="Financial Status" />;
+    },
     cell: ({ row }) => {
       const status = row.original.displayFinancialStatus;
-      return <div>{status}</div>;
+
+      // Map status to shadcn badge variants
+      const statusVariant: Record<
+        string,
+        { label: string; backgroundColor: string }
+      > = {
+        PAID: { label: "Paid", backgroundColor: "" },
+        PARTIALLY_PAID: {
+          label: "Partially Paid",
+          backgroundColor: "rgba(255, 214, 164, 1)",
+        },
+        AUTHORIZED: {
+          label: "Authorized",
+          backgroundColor: "rgba(255, 235, 120, 1)",
+        },
+        PENDING: {
+          label: "Payment Pending",
+          backgroundColor: "rgba(255, 214, 164, 1)",
+        },
+        PARTIALLY_REFUNDED: {
+          label: "Partially Refunded",
+          backgroundColor: "",
+        },
+        REFUNDED: { label: "Refunded", backgroundColor: "" },
+        VOIDED: { label: "Voided", backgroundColor: "" },
+      };
+
+      return (
+        <div>
+          <Badge variant={"secondary"} style={statusVariant[status]}>
+            {statusVariant[status]?.label || status}
+          </Badge>
+        </div>
+      );
     },
   },
   {
     accessorKey: "displayFulfillmentStatus",
-    header: "Fulfillment Status",
+    header: ({ column }) => {
+      return (
+        <DataTableColumnHeader column={column} title="Fulfillment Status" />
+      );
+    },
     cell: ({ row }) => {
-      const status = row.original.displayFulfillmentStatus;
-      return <div>{status}</div>;
+      const fulfillmentStatus = row.original.displayFulfillmentStatus;
+      const fulfillmentStatusVariant: Record<
+        typeof fulfillmentStatus,
+        { label: string; backgroundColor: string }
+      > = {
+        FULFILLED: { label: "Fulfilled", backgroundColor: "" },
+        PARTIALLY_FULFILLED: {
+          label: "Partially Fulfilled",
+          backgroundColor: "rgba(255, 214, 164, 1)",
+        },
+        UNFULFILLED: {
+          label: "Unfulfilled",
+          backgroundColor: "rgba(255, 235, 120, 1)",
+        },
+        SCHEDULED: {
+          label: "Scheduled",
+          backgroundColor: "",
+        },
+        ON_HOLD: {
+          label: "On Hold",
+          backgroundColor: "",
+        },
+        RESTOCKED: { label: "Restocked", backgroundColor: "" },
+        REQUEST_DECLINED: { label: "Request Declined", backgroundColor: "" },
+        PENDING_FULFILLMENT: {
+          label: "Pending Fulfillment",
+          backgroundColor: "",
+        },
+        IN_PROGRESS: {
+          label: "In Progress",
+          backgroundColor: "",
+        },
+        OPEN: {
+          label: "Open",
+          backgroundColor: "",
+        },
+      };
+      return (
+        <div>
+          <Badge
+            variant={"secondary"}
+            style={fulfillmentStatusVariant[fulfillmentStatus]}
+          >
+            {fulfillmentStatusVariant[fulfillmentStatus]?.label ||
+              fulfillmentStatus}
+          </Badge>
+        </div>
+      );
     },
   },
   {
     accessorKey: "lineItems",
-    header: "Items",
+    header: ({ column }) => {
+      return <DataTableColumnHeader column={column} title="Items" />;
+    },
     cell: ({ row }) => {
       const lineItems = row.original.lineItems.edges.length;
       return (
@@ -162,7 +258,27 @@ export const columns: ColumnDef<Order>[] = [
     },
   },
   {
-    accessorKey: "note",
-    header: "Note",
+    accessorKey: "tags",
+    header: "Tags",
+    cell: ({ row }) => {
+      const tags = row.original.tags;
+      return (
+        <div>
+          {tags.length > 0 ? (
+            tags.map((tag, index) => (
+              <Badge key={index} className="mr-1" variant="secondary">
+                {tag}
+              </Badge>
+            ))
+          ) : (
+            <span>No Tags</span>
+          )}
+        </div>
+      );
+    },
   },
+  // {
+  //   accessorKey: "note",
+  //   header: "Note",
+  // },
 ];

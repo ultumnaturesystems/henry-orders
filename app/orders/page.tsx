@@ -1,6 +1,6 @@
 import { fetchOrders } from "./actions";
 import { columns, Order } from "./columns";
-import { DataTable } from "./data-table";
+import { DataTable } from "../../components/data-table/data-table";
 
 const OrdersPage = async () => {
   const orders: Order[] = await fetchOrders();
