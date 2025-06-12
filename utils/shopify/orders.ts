@@ -67,6 +67,20 @@ export async function fetchOrderById(orderId: string) {
                             id
                             firstName
                             lastName
+                            email
+                            numberOfOrders
+                            defaultAddress{
+                                address1
+                                address2
+                                city
+                                company
+                                country
+                                name
+                                phone
+                                province
+                                provinceCode
+                                zip
+                            }
                         }
                         currentTotalPriceSet{
                             presentmentMoney{
@@ -76,6 +90,7 @@ export async function fetchOrderById(orderId: string) {
                         }
                         displayFinancialStatus
                         displayFulfillmentStatus
+                        
                         tags
                         lineItems(first:200){
                             edges{

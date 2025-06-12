@@ -19,16 +19,38 @@ export type DisplayFulfillmentStatus =
   | "SCHEDULED"
   | "UNFULFILLED";
 
+export type Customer = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string | null;
+  createdAt: string;
+  updatedAt: string;
+  numberOfOrders: number;
+  defaultAddress: Address | null;
+};
+
+export type Address = {
+  address1: string;
+  address2: string | null;
+  city: string;
+  country: string;
+  company: string | null;
+  name: string;
+  phone: string | null;
+  province: string;
+  provinceCode: string | null;
+  zip: string;
+};
+
 export type Order = {
   id: string;
   name: string;
   note: string;
   createdAt: string;
-  customer: {
-    id: string;
-    firstName: string;
-    lastName: string;
-  };
+  customer: Customer;
+
   currentTotalPriceSet: {
     presentmentMoney: {
       amount: number;
@@ -37,29 +59,31 @@ export type Order = {
   };
   displayFinancialStatus: DisplayFinancialStatus;
   displayFulfillmentStatus: DisplayFulfillmentStatus;
-  lineItems: {
-    edges: {
-      node: {
-        id: string;
-        name: string;
-        quantity: number;
-        sku: string;
-        image: null | {
-          url: string;
-          altText: string;
-          height: number;
-          width: number;
-        };
-        originalUnitPriceSet: {
-          presentmentMoney: {
-            amount: number;
-            currencyCode: string;
-          };
+  lineItems: OrderLineItems;
+  tags: string[];
+};
+
+export type OrderLineItems = {
+  edges: {
+    node: {
+      id: string;
+      name: string;
+      quantity: number;
+      sku: string;
+      image: null | {
+        url: string;
+        altText: string;
+        height: number;
+        width: number;
+      };
+      originalUnitPriceSet: {
+        presentmentMoney: {
+          amount: number;
+          currencyCode: string;
         };
       };
-    }[];
-  };
-  tags: string[];
+    };
+  }[];
 };
 
 //Styling for Badges using financial and fulfillment status

@@ -10,6 +10,14 @@ import {
 import { fetchOrderById } from "@/utils/shopify/orders";
 import Image from "next/image";
 import { Image as ImageIcon } from "lucide-react";
+import {
+  financialStatusVariant,
+  fulfillmentStatusVariant,
+} from "@/utils/shopify/types";
+import CustomerCard from "./CustomerCard";
+import NotesCard from "./NotesCard";
+import TagsCard from "./TagsCard";
+import LineItemsCard from "./LineItemsCard";
 
 const OrderSlugPage = async ({
   params,
@@ -20,113 +28,42 @@ const OrderSlugPage = async ({
   const order = await fetchOrderById(id);
   //console.log("Fetched order:", order);
   return (
-    <div className="max-w-4xl mx-auto py-10 space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            Order <span className="text-muted-foreground">{order.name}</span>
-            <Badge variant="outline" className="ml-4">
-              {order.displayFinancialStatus}
-            </Badge>
-            <Badge variant="secondary" className="ml-2">
-              {order.displayFulfillmentStatus}
-            </Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="mb-4">
-            <div>
-              <span className="font-semibold">Customer:</span>{" "}
-              {order.customer.firstName} {order.customer.lastName}
-            </div>
-            <div>
-              <span className="font-semibold">Created:</span>{" "}
-              {new Date(order.createdAt).toLocaleString()}
-            </div>
-            <div>
-              <span className="font-semibold">Tags:</span>{" "}
-              {order.tags.map((tag: string) => (
-                <Badge key={tag} variant="outline" className="mr-1">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-            <div>
-              <span className="font-semibold">Note:</span> {order.note || "—"}
-            </div>
-          </div>
-          <div>
-            <span className="font-semibold">Line Items:</span>
-            <Table>
-              <TableHeader></TableHeader>
-              <TableBody>
-                {order.lineItems.edges.map(({ node }) => {
-                  const { image, originalUnitPriceSet, quantity } = node;
-                  return (
-                    <TableRow key={node.id}>
-                      <TableCell>
-                        {image ? (
-                          <Image
-                            src={image.url}
-                            alt={image.altText || "Product Image"}
-                            width={50}
-                            height={50}
-                          />
-                        ) : (
-                          <ImageIcon
-                            className="text-muted-foreground"
-                            style={{ width: "50px" }}
-                          />
-                        )}
-                      </TableCell>
-                      <TableCell
-                        style={{ display: "flex", flexDirection: "column" }}
-                      >
-                        <span className="font-semibold">{node.name}</span>
-                        {node.sku && (
-                          <span className="text-sm text-muted-foreground">
-                            SKU: {node.sku}
-                          </span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {new Intl.NumberFormat("en-US", {
-                          style: "currency",
-                          currency:
-                            originalUnitPriceSet.presentmentMoney.currencyCode,
-                        }).format(originalUnitPriceSet.presentmentMoney.amount)}
-                      </TableCell>
+    <div className="max-w-6xl mx-auto py-5 space-y-4">
+      {/* Main Order Card */}
+      <div className="flex flex-col">
+        <h1 className="text-2xl font-bold flex items-center">
+          {order.name}
+          <Badge
+            variant="outline"
+            style={financialStatusVariant[order.displayFinancialStatus]}
+            className="ml-4"
+          >
+            {order.displayFinancialStatus}
+          </Badge>
+          <Badge
+            variant="secondary"
+            style={fulfillmentStatusVariant[order.displayFulfillmentStatus]}
+            className="ml-2"
+          >
+            {order.displayFulfillmentStatus}
+          </Badge>
+        </h1>
+        <caption className="flex items-center text-sm text-muted-foreground">
+          {new Date(order.createdAt).toLocaleString()}
+        </caption>
+      </div>
 
-                      <TableCell>x</TableCell>
-                      <TableCell
-                        style={{ textAlign: "center" }}
-                      >{`${quantity}`}</TableCell>
-                      <TableCell style={{ textAlign: "center" }}>
-                        {new Intl.NumberFormat("en-US", {
-                          style: "currency",
-                          currency:
-                            originalUnitPriceSet.presentmentMoney.currencyCode,
-                        }).format(
-                          originalUnitPriceSet.presentmentMoney.amount *
-                            quantity
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </div>
-          <div className="mt-4">
-            <span className="font-semibold">Total: </span>
-            {new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency:
-                order.currentTotalPriceSet.presentmentMoney.currencyCode,
-            }).format(order.currentTotalPriceSet.presentmentMoney.amount)}
-          </div>
-        </CardContent>
-      </Card>
+      <div className="flex flex-row  space-x-6 ">
+        <div className="flex-1 max-w-4xl">
+          <LineItemsCard lineItems={order.lineItems} />
+        </div>
+        {/* Secondary Card */}
+        <div className="flex-1 max-w-xs space-y-4">
+          <NotesCard notes={order.note} />
+          <CustomerCard customer={order.customer} />
+          <TagsCard tags={order.tags} />
+        </div>
+      </div>
     </div>
   );
 };
