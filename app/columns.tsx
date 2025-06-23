@@ -47,7 +47,7 @@ export const columns: ColumnDef<Order>[] = [
       return (
         <div>
           <Link
-            href={`/orders/${orderId}`}
+            href={`/${orderId}`}
             style={{ textDecoration: "underline", color: "black" }}
           >
             {cell.getValue<string>()}
