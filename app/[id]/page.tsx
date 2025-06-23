@@ -1,15 +1,6 @@
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { fetchOrderById } from "@/utils/shopify/orders";
-import Image from "next/image";
-import { Image as ImageIcon } from "lucide-react";
+import { ChevronRight, Inbox as InboxIcon } from "lucide-react";
 import {
   financialStatusVariant,
   fulfillmentStatusVariant,
@@ -18,6 +9,7 @@ import CustomerCard from "./CustomerCard";
 import NotesCard from "./NotesCard";
 import TagsCard from "./TagsCard";
 import LineItemsCard from "./LineItemsCard";
+import Link from "next/link";
 
 const OrderSlugPage = async ({
   params,
@@ -26,13 +18,16 @@ const OrderSlugPage = async ({
 }) => {
   const { id } = await params;
   const order = await fetchOrderById(id);
-  //console.log("Fetched order:", order);
   return (
     <div className="max-w-6xl mx-auto py-5 space-y-4">
       {/* Main Order Card */}
-      <div className="flex flex-col">
-        <h1 className="text-2xl font-bold flex items-center">
-          {order.name}
+      <section className="flex flex-col">
+        <div className="text-2xl font-bold flex items-center">
+          <Link href="/" className="text-decoration-none">
+            <InboxIcon className="mr-2" />
+          </Link>
+          <ChevronRight size={16} className="mr-2" />
+          <h1>{order.name}</h1>
           <Badge
             variant="outline"
             style={financialStatusVariant[order.displayFinancialStatus]}
@@ -47,11 +42,11 @@ const OrderSlugPage = async ({
           >
             {order.displayFulfillmentStatus}
           </Badge>
-        </h1>
-        <caption className="flex items-center text-sm text-muted-foreground">
+        </div>
+        <span className="flex items-center text-sm text-muted-foreground">
           {new Date(order.createdAt).toLocaleString()}
-        </caption>
-      </div>
+        </span>
+      </section>
 
       <div className="flex flex-row  space-x-6 ">
         <div className="flex-1 max-w-4xl">
