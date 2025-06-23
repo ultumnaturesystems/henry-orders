@@ -15,6 +15,7 @@ import { login } from "../app/(auth)/login/actions";
 import { Eye, EyeOff } from "lucide-react";
 
 import { useState } from "react";
+import Link from "next/link";
 
 export function LoginForm({
   className,
@@ -47,12 +48,12 @@ export function LoginForm({
               <div className="grid gap-3">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
+                  <Link
+                    href="/forgot-password"
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                   >
                     Forgot your password?
-                  </a>
+                  </Link>
                 </div>
                 <div className="relative">
                   <Input
