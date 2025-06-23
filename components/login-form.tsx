@@ -37,6 +37,7 @@ export function LoginForm({
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
                 <Input
+                  name="email"
                   id="email"
                   type="email"
                   placeholder="m@example.com"
@@ -56,6 +57,7 @@ export function LoginForm({
                 <div className="relative">
                   <Input
                     id="password"
+                    name="password"
                     type={showPassword ? "text" : "password"}
                     required
                     className="pr-10"
@@ -74,7 +76,7 @@ export function LoginForm({
                 </div>
               </div>
               <div className="flex flex-col gap-3">
-                <Button formAction={login} className="w-full">
+                <Button formAction={login} className="w-full cursor-pointer">
                   Login
                 </Button>
                 {/* <Button variant="outline" className="w-full">
