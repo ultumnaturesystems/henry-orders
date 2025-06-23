@@ -11,6 +11,7 @@ import { DropdownMenuItem } from "./ui/dropdown-menu";
 import { createClient } from "@/utils/supabase/client";
 import { redirect } from "next/navigation";
 import UNSLogoIcon from "./ui/uns-logo";
+import Link from "next/link";
 
 export default function NavigationMenu() {
   const handleLogout = async () => {
@@ -28,7 +29,9 @@ export default function NavigationMenu() {
   return (
     <nav className="bg-gray-950 border-b border-gray-200 h-12 flex items-center justify-between px-4">
       <div className="w-8 h-8 flex items-center">
-        <UNSLogoIcon />
+        <Link href="/" className="invert text-decoration-none">
+          <UNSLogoIcon className="" />
+        </Link>
       </div>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
