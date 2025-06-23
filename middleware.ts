@@ -1,26 +1,17 @@
-import { NextRequest, NextResponse } from "next/server";
-
-export const config = {
-  matcher: ["/", "/index"],
-};
-
-export function middleware(req: NextRequest) {
-  const basicAuth = req.headers.get("authorization");
-  const url = req.nextUrl;
-
-  if (basicAuth) {
-    const authValue = basicAuth.split(" ")[1];
-    const [user, pwd] = atob(authValue).split(":");
-
-    const validUser = process.env.AUTH_USER;
-    const validPassWord = process.env.AUTH_PASSWORD;
-
-    if (user === validUser && pwd === validPassWord) {
-      return NextResponse.next();
-    }
-  }
-
-  url.pathname = "/api/auth";
-
-  return NextResponse.rewrite(url);
+import { type NextRequest } from "next/server";
+import { updateSession } from "@/utils/supabase/middleware";
+export async function middleware(request: NextRequest) {
+  return await updateSession(request);
 }
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * Feel free to modify this pattern to include more paths.
+     */
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
+};
