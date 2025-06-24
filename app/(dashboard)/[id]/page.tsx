@@ -10,12 +10,15 @@ import NotesCard from "./NotesCard";
 import TagsCard from "./TagsCard";
 import LineItemsCard from "./LineItemsCard";
 import Link from "next/link";
+import { orderTagsFlag } from "@/flags/flags";
 
 const OrderSlugPage = async ({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) => {
+  const orderTagFlag = await orderTagsFlag();
+
   const { id } = await params;
   const order = await fetchOrderById(id);
   return (
@@ -56,7 +59,7 @@ const OrderSlugPage = async ({
         <div className="flex-1 max-w-xs space-y-4">
           <NotesCard notes={order.note} />
           <CustomerCard customer={order.customer} />
-          <TagsCard tags={order.tags} />
+          {orderTagFlag && <TagsCard tags={order.tags} />}
         </div>
       </div>
     </div>
