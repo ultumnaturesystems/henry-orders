@@ -2,14 +2,14 @@
 
 import { createAdminApiClient } from "@shopify/admin-api-client";
 
-const client = createAdminApiClient({
-  storeDomain: "ultumnaturesystems.myshopify.com",
-  accessToken: process.env.SHOPIFY_ACCESS_TOKEN!,
-  apiVersion: "2025-04",
-});
-
 export async function fetchOrders() {
   try {
+    const client = createAdminApiClient({
+      storeDomain: "ultumnaturesystems.myshopify.com",
+      accessToken: process.env.SHOPIFY_ACCESS_TOKEN!,
+      apiVersion: "2025-04",
+    });
+
     const operation = `
             query {
                 orders(first: 75, query: "tag:'Henry'", sortKey: CREATED_AT, reverse: true) {
