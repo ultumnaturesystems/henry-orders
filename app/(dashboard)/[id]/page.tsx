@@ -10,7 +10,6 @@ import NotesCard from "./NotesCard";
 import TagsCard from "./TagsCard";
 import LineItemsCard from "./LineItemsCard";
 import Link from "next/link";
-import { orderTagsFlag } from "@/flags/flags";
 
 const OrderSlugPage = async ({
   params,
