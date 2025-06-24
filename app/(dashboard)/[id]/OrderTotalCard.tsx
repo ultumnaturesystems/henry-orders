@@ -21,9 +21,8 @@ const OrderTotalCard = ({ order }: OrderTotalCardProps) => {
     shippingLines,
   } = order;
 
-  const totalItems = lineItems.edges.reduce(
-    (total: number, { node }: { node: { quantity: number } }) =>
-      total + node.quantity,
+  const totalItems = lineItems.nodes.reduce(
+    (total: number, { quantity }: { quantity: number }) => total + quantity,
     0
   );
 
@@ -47,8 +46,8 @@ const OrderTotalCard = ({ order }: OrderTotalCardProps) => {
             <TableRow>
               <TableCell>Shipping</TableCell>
               <TableCell>
-                {shippingLines.edges.length > 0
-                  ? shippingLines.edges.map(({ node }) => node.title).join(", ")
+                {shippingLines.nodes.length > 0
+                  ? shippingLines.nodes.map(({ title }) => title).join(", ")
                   : "No shipping"}
               </TableCell>
               <TableCell>

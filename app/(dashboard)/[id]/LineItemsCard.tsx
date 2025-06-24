@@ -1,36 +1,63 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { OrderLineItems } from "@/utils/shopify/types";
+  Image as ShopifyImage,
+  LineItem,
+  Fulfillment,
+} from "@/utils/shopify/types";
 import Image from "next/image";
-import { Image as ImageIcon } from "lucide-react";
+import { Image as ImageIcon, PackageOpen, Truck } from "lucide-react";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import FulfillmentDetails from "./FulfillmentDetails";
 
 interface LineItemsCardProps {
-  lineItems: OrderLineItems;
+  itemGroup: {
+    nodes: LineItem[];
+    isFulfilled: boolean;
+    fulfillment: Fulfillment | null;
+  };
 }
 
-const LineItemsCard = ({ lineItems }: LineItemsCardProps) => {
+const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
+  const { nodes: lineItems, isFulfilled, fulfillment } = itemGroup;
+  const totalItems = lineItems.reduce(
+    (total: number, { quantity }: { quantity: number }) => total + quantity,
+    0
+  );
   return (
-    <Card>
+    <Card className="gap-2">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Badge
+            className={`${
+              isFulfilled ? "bg-green-300" : "bg-yellow-200"
+            } text-gray-800 tracking-wide text-sm font-semibold flex items-center gap-1`}
+          >
+            {isFulfilled ? <Truck size={16} /> : <PackageOpen size={16} />}
+            {`${isFulfilled ? "Fulfilled" : "Unfulfilled"} (${totalItems})`}
+          </Badge>
+          <h3>{fulfillment?.name}</h3>
+        </CardTitle>
+      </CardHeader>
       <CardContent>
+        {isFulfilled && (
+          <section className="px-3 py-2 border rounded-lg">
+            <div className="flex flex-col text-sm">
+              <FulfillmentDetails fulfillment={fulfillment} />
+            </div>
+          </section>
+        )}
         <Table>
-          <TableHeader></TableHeader>
           <TableBody>
-            {lineItems.edges.map(({ node }) => {
+            {lineItems.map((lineItem) => {
               const { image, originalUnitPriceSet, quantity, title, variant } =
-                node;
+                lineItem;
               const { title: variantTitle } = variant;
               return (
-                <TableRow key={node.id}>
+                <TableRow key={lineItem.id}>
                   <TableCell>
                     <LineItemImage image={image} />
                   </TableCell>
@@ -75,16 +102,10 @@ const LineItemsCard = ({ lineItems }: LineItemsCardProps) => {
   );
 };
 
-const LineItemImage = ({
-  image,
-}: {
-  image?: OrderLineItems["edges"][number]["node"]["image"];
-}) => {
+const LineItemImage = ({ image }: { image?: ShopifyImage | null }) => {
   const [imageError, setImageError] = useState<boolean>(false);
   if (!image || imageError) {
-    return (
-      <ImageIcon className="text-muted-foreground" style={{ width: "50px" }} />
-    );
+    return <ImageIcon className="text-muted-foreground" size={50} />;
   }
   return (
     <Image

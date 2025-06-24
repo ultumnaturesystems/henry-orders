@@ -1,3 +1,22 @@
+export type FulfillmentDisplayStatus =
+  | "ATTEMPTED_DELIVERY"
+  | "CANCELED"
+  | "CONFIRMED"
+  | "DELAYED"
+  | "DELIVERED"
+  | "FAILURE"
+  | "FULFILLED"
+  | "IN_TRANSIT"
+  | "LABEL_PRINTED"
+  | "LABEL_PURCHASED"
+  | "LABEL_VOIDED"
+  | "MARKED_AS_FULFILLED"
+  | "NOT_DELIVERED"
+  | "OUT_FOR_DELIVERY"
+  | "PICKED_UP"
+  | "READY_FOR_PICKUP"
+  | "SUBMITTED";
+
 export type DisplayFinancialStatus =
   | "AUTHORIZED"
   | "PAID"
@@ -63,43 +82,62 @@ export interface Order {
   currentSubtotalPriceSet: PriceSet;
   currentTotalPriceSet: PriceSet;
   currentShippingPriceSet: PriceSet;
-  shippingLines: ShippingLines;
+  shippingLines: { nodes: ShippingLine[] };
   displayFinancialStatus: DisplayFinancialStatus;
   displayFulfillmentStatus: DisplayFulfillmentStatus;
-  lineItems: OrderLineItems;
+  fulfillments: Fulfillment[];
+  lineItems: { nodes: LineItem[] };
   tags: string[];
 }
 
-export interface OrderLineItems {
-  edges: {
-    node: {
-      id: string;
-      title: string;
-      name: string;
-      quantity: number;
-      sku: string;
-      variant: {
-        title: string;
-      };
-      image: null | {
-        url: string;
-        altText: string;
-        height: number;
-        width: number;
-      };
-      originalUnitPriceSet: {
-        presentmentMoney: {
-          amount: number;
-          currencyCode: string;
-        };
-      };
+export interface LineItem {
+  id: string;
+  title: string;
+  name: string;
+  quantity: number;
+  unfulfilledQuantity: number;
+  sku: string;
+  variant: {
+    title: string;
+  };
+  image: Image | null;
+  originalUnitPriceSet: {
+    presentmentMoney: {
+      amount: number;
+      currencyCode: string;
     };
-  }[];
+  };
 }
 
-export interface ShippingLines {
-  edges: {
-    node: { title: string };
+export interface ShippingLine {
+  title: string;
+}
+
+export interface Image {
+  url: string;
+  altText: string;
+  height: number;
+  width: number;
+}
+
+export interface Fulfillment {
+  id: string;
+  name: string;
+  fulfillmentLineItems: {
+    nodes: {
+      id: string;
+      quantity: number;
+      lineItem: LineItem;
+    }[];
+  };
+  updatedAt: string;
+  deliveredAt: string;
+  estimatedDeliveryAt: string;
+  displayStatus: FulfillmentDisplayStatus;
+  trackingInfo: {
+    company: string;
+    url: string;
+    number: string;
   }[];
 }
 

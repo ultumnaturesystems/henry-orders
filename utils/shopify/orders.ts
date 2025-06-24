@@ -97,35 +97,73 @@ export async function fetchOrderById(orderId: string) {
                         displayFinancialStatus
                         displayFulfillmentStatus
                         shippingLines(first:10){
-                            edges{
-                                node{
-                                    title
-                                }
+                            nodes{
+                                title
                             }
                         }
                         tags
-                        lineItems(first:200){
-                            edges{
-                                node{
+                        fulfillments(first:100){
+                            id
+                            name
+                            fulfillmentLineItems(first:250){
+                                nodes{
                                     id
-                                    title
-                                    name
                                     quantity
-                                    sku
-                                    variant{
+                                    lineItem{
+                                        id
                                         title
-                                    }
-                                    image{
-                                        url
-                                        altText
-                                        height
-                                        width
-                                    }
-                                    originalUnitPriceSet{
-                                        presentmentMoney{
-                                            amount
-                                            currencyCode
+                                        name
+                                        quantity
+                                        sku
+                                        variant{
+                                            title
                                         }
+                                        image{
+                                            url
+                                            altText
+                                            height
+                                            width
+                                        }
+                                        originalUnitPriceSet{
+                                            presentmentMoney{
+                                                amount
+                                                currencyCode
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            deliveredAt
+                            displayStatus
+                            updatedAt
+                            estimatedDeliveryAt
+                            trackingInfo{
+                                company
+                                url
+                                number
+                            }
+                        }
+                        lineItems(first:200){
+                            nodes{
+                                id
+                                title
+                                name
+                                quantity
+                                unfulfilledQuantity
+                                sku
+                                variant{
+                                    title
+                                }
+                                image{
+                                    url
+                                    altText
+                                    height
+                                    width
+                                }
+                                originalUnitPriceSet{
+                                    presentmentMoney{
+                                        amount
+                                        currencyCode
                                     }
                                 }
                             }
