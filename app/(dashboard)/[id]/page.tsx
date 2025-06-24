@@ -17,8 +17,6 @@ const OrderSlugPage = async ({
 }: {
   params: Promise<{ id: string }>;
 }) => {
-  const orderTagFlag = await orderTagsFlag();
-
   const { id } = await params;
   const order = await fetchOrderById(id);
   return (
@@ -59,7 +57,7 @@ const OrderSlugPage = async ({
         <div className="flex-1 max-w-xs space-y-4">
           <NotesCard notes={order.note} />
           <CustomerCard customer={order.customer} />
-          {orderTagFlag && <TagsCard tags={order.tags} />}
+          {/* <TagsCard tags={order.tags} /> */}
         </div>
       </div>
     </div>

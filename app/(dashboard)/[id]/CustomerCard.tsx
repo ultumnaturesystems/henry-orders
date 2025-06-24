@@ -8,7 +8,7 @@ const CustomerCard = ({ customer }: CustomerCardProps) => {
   const { firstName, lastName, email, numberOfOrders, defaultAddress } =
     customer;
   return (
-    <Card>
+    <Card className="gap-3">
       <CardHeader>
         <CardTitle>Customer</CardTitle>
       </CardHeader>

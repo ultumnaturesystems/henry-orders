@@ -6,13 +6,15 @@ interface NotesCardProps {
 
 const NotesCard = ({ notes }: NotesCardProps) => {
   return (
-    <Card>
+    <Card className="gap-3">
       <CardHeader>
         <CardTitle>Notes</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col space-y-2">
-          <span>{notes || "—"}</span>
+          <span className={!notes ? "text-muted-foreground italic" : undefined}>
+            {notes || "No notes from customer"}
+          </span>
         </div>
       </CardContent>
     </Card>
