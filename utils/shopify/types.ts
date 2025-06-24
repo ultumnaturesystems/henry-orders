@@ -67,9 +67,13 @@ export type OrderLineItems = {
   edges: {
     node: {
       id: string;
+      title: string;
       name: string;
       quantity: number;
       sku: string;
+      variant: {
+        title: string;
+      };
       image: null | {
         url: string;
         altText: string;

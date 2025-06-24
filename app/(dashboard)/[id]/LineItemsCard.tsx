@@ -12,6 +12,7 @@ import { OrderLineItems } from "@/utils/shopify/types";
 import Image from "next/image";
 import { Image as ImageIcon } from "lucide-react";
 import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
 
 interface LineItemsCardProps {
   lineItems: OrderLineItems;
@@ -25,20 +26,20 @@ const LineItemsCard = ({ lineItems }: LineItemsCardProps) => {
           <TableHeader></TableHeader>
           <TableBody>
             {lineItems.edges.map(({ node }) => {
-              const { image, originalUnitPriceSet, quantity } = node;
+              const { image, originalUnitPriceSet, quantity, title, variant } =
+                node;
+              const { title: variantTitle } = variant;
               return (
                 <TableRow key={node.id}>
                   <TableCell>
                     <LineItemImage image={image} />
                   </TableCell>
-                  <TableCell
-                    style={{ display: "flex", flexDirection: "column" }}
-                  >
-                    <span className="font-semibold">{node.name}</span>
-                    {node.sku && (
-                      <span className="text-sm text-muted-foreground">
-                        SKU: {node.sku}
-                      </span>
+                  <TableCell className="flex flex-col">
+                    <span className="font-semibold">{title}</span>
+                    {variantTitle !== "Default Title" && (
+                      <Badge variant="secondary" className="bg-gray-200">
+                        {variantTitle}
+                      </Badge>
                     )}
                   </TableCell>
                   <TableCell>
@@ -53,7 +54,9 @@ const LineItemsCard = ({ lineItems }: LineItemsCardProps) => {
                   <TableCell
                     style={{ textAlign: "center" }}
                   >{`${quantity}`}</TableCell>
-                  <TableCell style={{ textAlign: "center" }}>
+                  <TableCell
+                    style={{ textAlign: "center", paddingLeft: "25px" }}
+                  >
                     {new Intl.NumberFormat("en-US", {
                       style: "currency",
                       currency:

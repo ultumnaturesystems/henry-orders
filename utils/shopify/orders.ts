@@ -95,11 +95,14 @@ export async function fetchOrderById(orderId: string) {
                         lineItems(first:200){
                             edges{
                                 node{
-                                    
                                     id
+                                    title
                                     name
                                     quantity
                                     sku
+                                    variant{
+                                        title
+                                    }
                                     image{
                                         url
                                         altText
