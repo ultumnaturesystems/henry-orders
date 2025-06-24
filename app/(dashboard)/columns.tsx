@@ -154,26 +154,26 @@ export const columns: ColumnDef<Order>[] = [
       );
     },
   },
-  {
-    accessorKey: "tags",
-    header: "Tags",
-    cell: ({ row }) => {
-      const tags = row.original.tags;
-      return (
-        <div>
-          {tags.length > 0 ? (
-            tags.map((tag, index) => (
-              <Badge key={index} className="mr-1" variant="secondary">
-                {tag}
-              </Badge>
-            ))
-          ) : (
-            <span>No Tags</span>
-          )}
-        </div>
-      );
-    },
-  },
+  // {
+  //   accessorKey: "tags",
+  //   header: "Tags",
+  //   cell: ({ row }) => {
+  //     const tags = row.original.tags;
+  //     return (
+  //       <div>
+  //         {tags.length > 0 ? (
+  //           tags.map((tag, index) => (
+  //             <Badge key={index} className="mr-1" variant="secondary">
+  //               {tag}
+  //             </Badge>
+  //           ))
+  //         ) : (
+  //           <span>No Tags</span>
+  //         )}
+  //       </div>
+  //     );
+  //   },
+  // },
   // {
   //   accessorKey: "note",
   //   header: "Note",
