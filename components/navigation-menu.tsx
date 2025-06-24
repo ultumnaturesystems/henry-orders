@@ -21,7 +21,6 @@ export default function NavigationMenu() {
       console.error("Logout failed:", error.message);
     } else {
       // Optionally, redirect or show a success message
-      console.log("Logout successful");
       redirect("/login");
     }
   };
