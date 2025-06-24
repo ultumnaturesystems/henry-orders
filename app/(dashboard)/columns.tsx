@@ -146,7 +146,7 @@ export const columns: ColumnDef<Order>[] = [
       return <DataTableColumnHeader column={column} title="Items" />;
     },
     cell: ({ row }) => {
-      const lineItems = row.original.lineItems.edges.length;
+      const lineItems = row.original.lineItems.nodes.length;
       return (
         <div>
           {lineItems} item{lineItems !== 1 ? "s" : ""}
