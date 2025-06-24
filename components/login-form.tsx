@@ -14,9 +14,8 @@ import { Label } from "@/components/ui/label";
 import { login } from "../app/(auth)/login/actions";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 export function LoginForm({
   className,
