@@ -12,16 +12,36 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { login } from "../app/(auth)/login/actions";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 
-import { useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries()) as {
+      email: string;
+      password: string;
+    };
+    try {
+      await login(data);
+      // Optionally redirect or handle success here
+    } catch (error) {
+      // Handle error (e.g., show error message)
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -33,7 +53,7 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleLogin}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
@@ -76,21 +96,18 @@ export function LoginForm({
                   </button>
                 </div>
               </div>
-              <div className="flex flex-col gap-3">
-                <Button formAction={login} className="w-full cursor-pointer">
+              <div className="relative">
+                <Button type="submit" className="w-full cursor-pointer">
                   Login
                 </Button>
-                {/* <Button variant="outline" className="w-full">
-                                Login with Google
-                            </Button> */}
+                {loading && (
+                  <LoaderCircle
+                    color="#ffffff"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 animate-spin"
+                  />
+                )}
               </div>
             </div>
-            {/* <div className="mt-4 text-center text-sm">
-                        Don&apos;t have an account?{" "}
-                        <a href="#" className="underline underline-offset-4">
-                            Sign up
-                        </a>
-                    </div> */}
           </form>
         </CardContent>
       </Card>
