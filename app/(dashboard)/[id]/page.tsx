@@ -45,6 +45,11 @@ const OrderSlugPage = async ({
           >
             {order.displayFulfillmentStatus}
           </Badge>
+          {order.closed && (
+            <Badge variant="outline" className="ml-2">
+              Archived
+            </Badge>
+          )}
         </div>
         <span className="flex items-center text-sm text-muted-foreground">
           {new Date(order.createdAt).toLocaleString()}

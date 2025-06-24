@@ -102,6 +102,7 @@ export async function fetchOrderById(orderId: string) {
                             }
                         }
                         tags
+                        closed
                         fulfillments(first:100){
                             id
                             name

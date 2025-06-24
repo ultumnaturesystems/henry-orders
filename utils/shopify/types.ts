@@ -78,7 +78,7 @@ export interface Order {
   note: string;
   createdAt: string;
   customer: Customer;
-
+  closed: boolean;
   currentSubtotalPriceSet: PriceSet;
   currentTotalPriceSet: PriceSet;
   currentShippingPriceSet: PriceSet;
