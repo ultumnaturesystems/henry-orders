@@ -1,9 +1,11 @@
+import { ForgotPasswordForm } from "@/components/forgot-password-form";
+
 const ForgotPasswordPage = () => {
   return (
-    <div>
-      <h1>Forgot Password</h1>
-      <p>Please enter your email address to reset your password.</p>
-      {/* Add your form or other components here */}
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+      <div className="w-full max-w-sm">
+        <ForgotPasswordForm />
+      </div>
     </div>
   );
 };

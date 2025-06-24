@@ -146,7 +146,7 @@ export const columns: ColumnDef<Order>[] = [
       return <DataTableColumnHeader column={column} title="Items" />;
     },
     cell: ({ row }) => {
-      const lineItems = row.original.lineItems.edges.length;
+      const lineItems = row.original.lineItems.nodes.length;
       return (
         <div>
           {lineItems} item{lineItems !== 1 ? "s" : ""}
@@ -154,26 +154,26 @@ export const columns: ColumnDef<Order>[] = [
       );
     },
   },
-  {
-    accessorKey: "tags",
-    header: "Tags",
-    cell: ({ row }) => {
-      const tags = row.original.tags;
-      return (
-        <div>
-          {tags.length > 0 ? (
-            tags.map((tag, index) => (
-              <Badge key={index} className="mr-1" variant="secondary">
-                {tag}
-              </Badge>
-            ))
-          ) : (
-            <span>No Tags</span>
-          )}
-        </div>
-      );
-    },
-  },
+  // {
+  //   accessorKey: "tags",
+  //   header: "Tags",
+  //   cell: ({ row }) => {
+  //     const tags = row.original.tags;
+  //     return (
+  //       <div>
+  //         {tags.length > 0 ? (
+  //           tags.map((tag, index) => (
+  //             <Badge key={index} className="mr-1" variant="secondary">
+  //               {tag}
+  //             </Badge>
+  //           ))
+  //         ) : (
+  //           <span>No Tags</span>
+  //         )}
+  //       </div>
+  //     );
+  //   },
+  // },
   // {
   //   accessorKey: "note",
   //   header: "Note",

@@ -10,6 +10,8 @@ import NotesCard from "./NotesCard";
 import TagsCard from "./TagsCard";
 import LineItemsCard from "./LineItemsCard";
 import Link from "next/link";
+import OrderTotalCard from "./OrderTotalCard";
+import { splitFulfilledLineItems } from "./utils";
 
 const OrderSlugPage = async ({
   params,
@@ -18,6 +20,7 @@ const OrderSlugPage = async ({
 }) => {
   const { id } = await params;
   const order = await fetchOrderById(id);
+  const itemGroups = splitFulfilledLineItems(order);
   return (
     <div className="max-w-6xl mx-auto py-5 space-y-4">
       {/* Main Order Card */}
@@ -42,21 +45,29 @@ const OrderSlugPage = async ({
           >
             {order.displayFulfillmentStatus}
           </Badge>
+          {order.closed && (
+            <Badge variant="outline" className="ml-2">
+              Archived
+            </Badge>
+          )}
         </div>
         <span className="flex items-center text-sm text-muted-foreground">
           {new Date(order.createdAt).toLocaleString()}
         </span>
       </section>
 
-      <div className="flex flex-row  space-x-6 ">
-        <div className="flex-1 max-w-4xl">
-          <LineItemsCard lineItems={order.lineItems} />
+      <div className="flex flex-row space-x-6 ">
+        <div className="flex-1 max-w-4xl space-y-4">
+          {itemGroups?.map((group, index) => (
+            <LineItemsCard key={index} itemGroup={group} />
+          ))}
+          <OrderTotalCard order={order} />
         </div>
         {/* Secondary Card */}
         <div className="flex-1 max-w-xs space-y-4">
           <NotesCard notes={order.note} />
           <CustomerCard customer={order.customer} />
-          <TagsCard tags={order.tags} />
+          {/* <TagsCard tags={order.tags} /> */}
         </div>
       </div>
     </div>

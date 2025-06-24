@@ -3,6 +3,12 @@
 import { client } from "./client";
 import { Order } from "@/utils/shopify/types";
 
+const presentmentMoney = `
+    presentmentMoney {
+        amount
+        currencyCode
+    }`;
+
 export async function fetchOrders() {
   try {
     const operation = `
@@ -20,10 +26,7 @@ export async function fetchOrders() {
                                 lastName
                             }
                             currentTotalPriceSet{
-                                presentmentMoney{
-                                    amount
-                                    currencyCode
-                                }
+                                ${presentmentMoney}
                             }
                             displayFinancialStatus
                             displayFulfillmentStatus
@@ -82,35 +85,86 @@ export async function fetchOrderById(orderId: string) {
                                 zip
                             }
                         }
+                        currentSubtotalPriceSet{
+                            ${presentmentMoney}
+                        }
                         currentTotalPriceSet{
-                            presentmentMoney{
-                                amount
-                                currencyCode
-                            }
+                            ${presentmentMoney}
+                        }
+                        currentShippingPriceSet{
+                            ${presentmentMoney}
                         }
                         displayFinancialStatus
                         displayFulfillmentStatus
-                        
+                        shippingLines(first:10){
+                            nodes{
+                                title
+                            }
+                        }
                         tags
-                        lineItems(first:200){
-                            edges{
-                                node{
-                                    
+                        closed
+                        fulfillments(first:100){
+                            id
+                            name
+                            fulfillmentLineItems(first:250){
+                                nodes{
                                     id
-                                    name
                                     quantity
-                                    sku
-                                    image{
-                                        url
-                                        altText
-                                        height
-                                        width
-                                    }
-                                    originalUnitPriceSet{
-                                        presentmentMoney{
-                                            amount
-                                            currencyCode
+                                    lineItem{
+                                        id
+                                        title
+                                        name
+                                        quantity
+                                        sku
+                                        variant{
+                                            title
                                         }
+                                        image{
+                                            url
+                                            altText
+                                            height
+                                            width
+                                        }
+                                        originalUnitPriceSet{
+                                            presentmentMoney{
+                                                amount
+                                                currencyCode
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            deliveredAt
+                            displayStatus
+                            updatedAt
+                            estimatedDeliveryAt
+                            trackingInfo{
+                                company
+                                url
+                                number
+                            }
+                        }
+                        lineItems(first:200){
+                            nodes{
+                                id
+                                title
+                                name
+                                quantity
+                                unfulfilledQuantity
+                                sku
+                                variant{
+                                    title
+                                }
+                                image{
+                                    url
+                                    altText
+                                    height
+                                    width
+                                }
+                                originalUnitPriceSet{
+                                    presentmentMoney{
+                                        amount
+                                        currencyCode
                                     }
                                 }
                             }

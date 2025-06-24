@@ -1,3 +1,22 @@
+export type FulfillmentDisplayStatus =
+  | "ATTEMPTED_DELIVERY"
+  | "CANCELED"
+  | "CONFIRMED"
+  | "DELAYED"
+  | "DELIVERED"
+  | "FAILURE"
+  | "FULFILLED"
+  | "IN_TRANSIT"
+  | "LABEL_PRINTED"
+  | "LABEL_PURCHASED"
+  | "LABEL_VOIDED"
+  | "MARKED_AS_FULFILLED"
+  | "NOT_DELIVERED"
+  | "OUT_FOR_DELIVERY"
+  | "PICKED_UP"
+  | "READY_FOR_PICKUP"
+  | "SUBMITTED";
+
 export type DisplayFinancialStatus =
   | "AUTHORIZED"
   | "PAID"
@@ -19,7 +38,7 @@ export type DisplayFulfillmentStatus =
   | "SCHEDULED"
   | "UNFULFILLED";
 
-export type Customer = {
+export interface Customer {
   id: string;
   firstName: string;
   lastName: string;
@@ -29,9 +48,9 @@ export type Customer = {
   updatedAt: string;
   numberOfOrders: number;
   defaultAddress: Address | null;
-};
+}
 
-export type Address = {
+export interface Address {
   address1: string;
   address2: string | null;
   city: string;
@@ -42,49 +61,85 @@ export type Address = {
   province: string;
   provinceCode: string | null;
   zip: string;
-};
+}
 
-export type Order = {
+interface PriceSet {
+  presentmentMoney: PresentmentMoney;
+}
+
+interface PresentmentMoney {
+  amount: number;
+  currencyCode: string;
+}
+
+export interface Order {
   id: string;
   name: string;
   note: string;
   createdAt: string;
   customer: Customer;
+  closed: boolean;
+  currentSubtotalPriceSet: PriceSet;
+  currentTotalPriceSet: PriceSet;
+  currentShippingPriceSet: PriceSet;
+  shippingLines: { nodes: ShippingLine[] };
+  displayFinancialStatus: DisplayFinancialStatus;
+  displayFulfillmentStatus: DisplayFulfillmentStatus;
+  fulfillments: Fulfillment[];
+  lineItems: { nodes: LineItem[] };
+  tags: string[];
+}
 
-  currentTotalPriceSet: {
+export interface LineItem {
+  id: string;
+  title: string;
+  name: string;
+  quantity: number;
+  unfulfilledQuantity: number;
+  sku: string;
+  variant: {
+    title: string;
+  };
+  image: Image | null;
+  originalUnitPriceSet: {
     presentmentMoney: {
       amount: number;
       currencyCode: string;
     };
   };
-  displayFinancialStatus: DisplayFinancialStatus;
-  displayFulfillmentStatus: DisplayFulfillmentStatus;
-  lineItems: OrderLineItems;
-  tags: string[];
-};
+}
 
-export type OrderLineItems = {
-  edges: {
-    node: {
+export interface ShippingLine {
+  title: string;
+}
+
+export interface Image {
+  url: string;
+  altText: string;
+  height: number;
+  width: number;
+}
+
+export interface Fulfillment {
+  id: string;
+  name: string;
+  fulfillmentLineItems: {
+    nodes: {
       id: string;
-      name: string;
       quantity: number;
-      sku: string;
-      image: null | {
-        url: string;
-        altText: string;
-        height: number;
-        width: number;
-      };
-      originalUnitPriceSet: {
-        presentmentMoney: {
-          amount: number;
-          currencyCode: string;
-        };
-      };
-    };
+      lineItem: LineItem;
+    }[];
+  };
+  updatedAt: string;
+  deliveredAt: string;
+  estimatedDeliveryAt: string;
+  displayStatus: FulfillmentDisplayStatus;
+  trackingInfo: {
+    company: string;
+    url: string;
+    number: string;
   }[];
-};
+}
 
 //Styling for Badges using financial and fulfillment status
 
