@@ -19,7 +19,7 @@ export type DisplayFulfillmentStatus =
   | "SCHEDULED"
   | "UNFULFILLED";
 
-export type Customer = {
+export interface Customer {
   id: string;
   firstName: string;
   lastName: string;
@@ -29,9 +29,9 @@ export type Customer = {
   updatedAt: string;
   numberOfOrders: number;
   defaultAddress: Address | null;
-};
+}
 
-export type Address = {
+export interface Address {
   address1: string;
   address2: string | null;
   city: string;
@@ -42,28 +42,35 @@ export type Address = {
   province: string;
   provinceCode: string | null;
   zip: string;
-};
+}
 
-export type Order = {
+interface PriceSet {
+  presentmentMoney: PresentmentMoney;
+}
+
+interface PresentmentMoney {
+  amount: number;
+  currencyCode: string;
+}
+
+export interface Order {
   id: string;
   name: string;
   note: string;
   createdAt: string;
   customer: Customer;
 
-  currentTotalPriceSet: {
-    presentmentMoney: {
-      amount: number;
-      currencyCode: string;
-    };
-  };
+  currentSubtotalPriceSet: PriceSet;
+  currentTotalPriceSet: PriceSet;
+  currentShippingPriceSet: PriceSet;
+  shippingLines: ShippingLines;
   displayFinancialStatus: DisplayFinancialStatus;
   displayFulfillmentStatus: DisplayFulfillmentStatus;
   lineItems: OrderLineItems;
   tags: string[];
-};
+}
 
-export type OrderLineItems = {
+export interface OrderLineItems {
   edges: {
     node: {
       id: string;
@@ -88,7 +95,13 @@ export type OrderLineItems = {
       };
     };
   }[];
-};
+}
+
+export interface ShippingLines {
+  edges: {
+    node: { title: string };
+  }[];
+}
 
 //Styling for Badges using financial and fulfillment status
 

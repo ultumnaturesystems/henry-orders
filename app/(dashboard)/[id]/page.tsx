@@ -10,6 +10,7 @@ import NotesCard from "./NotesCard";
 import TagsCard from "./TagsCard";
 import LineItemsCard from "./LineItemsCard";
 import Link from "next/link";
+import OrderTotalCard from "./OrderTotalCard";
 
 const OrderSlugPage = async ({
   params,
@@ -48,9 +49,10 @@ const OrderSlugPage = async ({
         </span>
       </section>
 
-      <div className="flex flex-row  space-x-6 ">
-        <div className="flex-1 max-w-4xl">
+      <div className="flex flex-row space-x-6 ">
+        <div className="flex-1 max-w-4xl space-y-4">
           <LineItemsCard lineItems={order.lineItems} />
+          <OrderTotalCard order={order} />
         </div>
         {/* Secondary Card */}
         <div className="flex-1 max-w-xs space-y-4">
