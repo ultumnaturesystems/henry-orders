@@ -1,15 +1,10 @@
 "use server";
 
-import { createAdminApiClient } from "@shopify/admin-api-client";
+import { OrdersResponse } from "@/utils/shopify/types";
+import { client } from "@/utils/shopify/client";
 
 export async function fetchOrders() {
   try {
-    const client = createAdminApiClient({
-      storeDomain: "ultumnaturesystems.myshopify.com",
-      accessToken: process.env.SHOPIFY_ACCESS_TOKEN!,
-      apiVersion: "2025-04",
-    });
-
     const operation = `
             query {
                 orders(first: 75, query: "tag:'Henry'", sortKey: CREATED_AT, reverse: true) {
@@ -33,11 +28,9 @@ export async function fetchOrders() {
                             displayFinancialStatus
                             displayFulfillmentStatus
                             lineItems(first:200){
-                                edges{
-                                    node{
-                                        id
-                                        name
-                                    }
+                                nodes{
+                                    id
+                                    name
                                 }
                             }
                             tags
@@ -46,6 +39,25 @@ export async function fetchOrders() {
                 }
             }
         `;
+
+    //   const response = await fetch(process.env.SHOPIFY_CHANNEL_URL!, {
+    //   method: "POST",
+    //   headers: {
+    //     "X-Shopify-Access-Token": process.env.SHOPIFY_ACCESS_TOKEN!,
+    //     "Content-Type": "application/json",
+    //     "Access-Control-Allow-Origin": "*",
+    //   },
+    //   body: JSON.stringify({ query: operation }),
+    // });
+
+    // if (!response.ok) {
+    //   throw new Error(`HTTP error! status: ${response.status}`);
+    // }
+
+    // const responseData = (await response.json()) as OrdersResponse;
+    // const orders = responseData.data.orders.edges.map((edge) => edge.node);
+    // console.log("Fetched orders:", orders);
+    // return orders;
 
     const { data, errors } = await client.request(operation);
     if (errors) {

@@ -1,7 +1,7 @@
 "use server";
 
-import { client } from "./client";
-import { Order } from "@/utils/shopify/types";
+import { Order, OrderByIDResponse } from "@/utils/shopify/types";
+import { client } from "@/utils/shopify/client";
 
 const presentmentMoney = `
     presentmentMoney {
@@ -9,59 +9,11 @@ const presentmentMoney = `
         currencyCode
     }`;
 
-export async function fetchOrders() {
-  try {
-    const operation = `
-            query {
-                orders(first: 75, query: "tag:'Henry'", sortKey: CREATED_AT, reverse: true) {
-                    edges{
-                        node{
-                            id
-                            name
-                            note
-                            createdAt
-                            customer{
-                                id
-                                firstName
-                                lastName
-                            }
-                            currentTotalPriceSet{
-                                ${presentmentMoney}
-                            }
-                            displayFinancialStatus
-                            displayFulfillmentStatus
-                            lineItems(first:200){
-                                edges{
-                                    node{
-                                        id
-                                        name
-                                    }
-                                }
-                            }
-                            tags
-                        }
-                    }
-                }
-            }
-        `;
-
-    const { data, errors } = await client.request(operation);
-    if (errors) {
-      console.error("GraphQL errors:", errors);
-      throw new Error("Failed to fetch orders");
-    }
-    return data.orders.edges.map((edge: any) => edge.node);
-  } catch (error) {
-    console.error("Error fetching orders:", error);
-    throw new Error("Failed to fetch orders");
-  }
-}
-
 export async function fetchOrderById(orderId: string) {
   try {
     const operation = `
-                query {
-                    order(id: "gid://shopify/Order/${orderId}") {
+                query OrderQuery($id: ID!){
+                    order(id: $id) {
                         id
                         name
                         note
@@ -173,12 +125,29 @@ export async function fetchOrderById(orderId: string) {
                 }
             `;
 
-    const { data, errors } = await client.request(operation);
+    // const response = await fetch(process.env.SHOPIFY_CHANNEL_URL!, {
+    //   method: "POST",
+    //   headers: {
+    //     "X-Shopify-Access-Token": process.env.SHOPIFY_ACCESS_TOKEN!,
+    //     "Content-Type": "application/json",
+    //     "Access-Control-Allow-Origin": "*",
+    //   },
+    //   body: JSON.stringify({ query: operation }),
+    // });
+    // if (!response.ok) {
+    //   throw new Error(`HTTP error! status: ${response.status}`);
+    // }
+    // const responseData = (await response.json()) as OrderByIDResponse;
+
+    // return responseData.data.order as Order;
+    const { data, errors } = await client.request(operation, {
+      variables: { id: `gid://shopify/Order/${orderId}` },
+    });
     if (errors) {
       console.error("GraphQL errors:", errors);
       throw new Error("Failed to fetch order");
     }
-    return data.order as Order;
+    return data?.order as Order;
   } catch (error) {
     console.error("Error fetching order:", error);
     throw new Error("Failed to fetch order");

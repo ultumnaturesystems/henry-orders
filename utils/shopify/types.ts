@@ -72,6 +72,35 @@ interface PresentmentMoney {
   currencyCode: string;
 }
 
+export interface Extensions {
+  cost: {
+    requestedQueryCost: number;
+    actualQueryCost: number;
+    throttleStatus: {
+      maximumAvailable: number;
+      currentlyAvailable: number;
+      restoreRate: number;
+    };
+  };
+}
+
+export interface OrderByIDResponse {
+  data: {
+    order: Order;
+  };
+  extensions: Extensions;
+}
+
+export interface OrdersResponse {
+  data: {
+    orders: {
+      edges: {
+        node: Order;
+      }[];
+    };
+  };
+}
+
 export interface Order {
   id: string;
   name: string;
