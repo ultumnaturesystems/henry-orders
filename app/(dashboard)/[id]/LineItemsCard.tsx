@@ -27,7 +27,7 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
     (total: number, { quantity }: { quantity: number }) => total + quantity,
     0
   );
-  const { badgeColor, icon, title } = asd(type);
+  const { badgeColor, icon, title } = getFulfillmentItemStatus(type);
 
   return (
     <Card className="gap-2">
@@ -118,7 +118,9 @@ const LineItemImage = ({ image }: { image?: ShopifyImage | null }) => {
   );
 };
 
-const asd = (type: "FULFILLED" | "UNFULFILLED" | "REMOVED") => {
+const getFulfillmentItemStatus = (
+  type: "FULFILLED" | "UNFULFILLED" | "REMOVED"
+) => {
   switch (type) {
     case "FULFILLED":
       return {
