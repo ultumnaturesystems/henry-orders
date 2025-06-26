@@ -13,6 +13,9 @@ import Link from "next/link";
 import OrderTotalCard from "./OrderTotalCard";
 import { splitFulfilledLineItems } from "./utils";
 
+// Force dynamic rendering and disable caching
+export const revalidate = 0;
+
 const OrderSlugPage = async ({
   params,
 }: {
