@@ -104,7 +104,7 @@ export async function fetchOrderById(orderId: string) {
                         }
                         originalTotalPriceSet{
                             ${presentmentMoney}
-                        }                      
+                        }              
                         displayFinancialStatus
                         displayFulfillmentStatus
                         shippingLines(first:10){

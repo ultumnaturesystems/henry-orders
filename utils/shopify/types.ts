@@ -126,6 +126,7 @@ export interface Order {
   currentSubtotalPriceSet: MoneyBag;
   currentTotalPriceSet: MoneyBag;
   currentShippingPriceSet: MoneyBag;
+  discountApplications: { nodes: {} };
   originalTotalPriceSet: MoneyBag;
   shippingLines: { nodes: ShippingLine[] };
   displayFinancialStatus: DisplayFinancialStatus;

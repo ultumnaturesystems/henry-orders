@@ -16,7 +16,6 @@ const OrderTotalCard = ({ order }: OrderTotalCardProps) => {
   const {
     lineItems,
     currentSubtotalPriceSet,
-    currentShippingPriceSet,
     currentTotalPriceSet,
     shippingLines,
   } = order;
@@ -30,13 +29,18 @@ const OrderTotalCard = ({ order }: OrderTotalCardProps) => {
     (
       total: number,
       {
-        originalUnitPriceSet,
-        quantity,
+        discountedUnitPriceAfterAllDiscountsSet,
+        currentQuantity,
       }: {
-        originalUnitPriceSet: { presentmentMoney: { amount: number } };
-        quantity: number;
+        discountedUnitPriceAfterAllDiscountsSet: {
+          presentmentMoney: { amount: number };
+        };
+        currentQuantity: number;
       }
-    ) => total + originalUnitPriceSet.presentmentMoney.amount * quantity,
+    ) =>
+      total +
+      discountedUnitPriceAfterAllDiscountsSet.presentmentMoney.amount *
+        currentQuantity,
     0
   );
 
@@ -57,11 +61,18 @@ const OrderTotalCard = ({ order }: OrderTotalCardProps) => {
                 }).format(originalTotalCost)}
               </TableCell>
             </TableRow>
+            <TableRow>
+              <TableCell>Discounts</TableCell>
+              <TableCell />
+              <TableCell className="text-right"></TableCell>
+            </TableRow>
             {shippingLines.nodes.map((line, index) => (
               <TableRow
                 key={`${line.title}-${index}`}
                 className={
-                  index !== shippingLines.nodes.length - 1 ? "border-b-0" : ""
+                  index !== shippingLines.nodes.length - 1
+                    ? "border-b-0 mb-0"
+                    : ""
                 }
               >
                 <TableCell>{index === 0 ? "Shipping" : ""}</TableCell>
@@ -80,7 +91,7 @@ const OrderTotalCard = ({ order }: OrderTotalCardProps) => {
                 </TableCell>
               </TableRow>
             ))}
-            <TableRow>
+            <TableRow className="font-bold">
               <TableCell>Total</TableCell>
               <TableCell />
               <TableCell className="text-right">
