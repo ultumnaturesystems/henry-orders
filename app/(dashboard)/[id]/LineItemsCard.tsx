@@ -77,7 +77,9 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
                 <TableRow key={lineItem.id}>
                   <TableCell>
                     <div className="flex justify-center w-full">
-                      <LineItemImage image={image} />
+                      <div className="rounded-lg border border-gray-200">
+                        <LineItemImage image={image} />
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -168,10 +170,11 @@ const LineItemDiscountedPrice = ({ lineItem }: { lineItem: LineItem }) => {
 const LineItemImage = ({ image }: { image?: ShopifyImage | null }) => {
   const [imageError, setImageError] = useState<boolean>(false);
   if (!image || imageError) {
-    return <ImageIcon className="text-muted-foreground" size={25} />;
+    return <ImageIcon className="text-muted-foreground m-2 p-1" size={25} />;
   }
   return (
     <Image
+      className="rounded-lg"
       src={image.url}
       alt={image.altText || "Product Image"}
       width={50}
