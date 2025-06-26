@@ -171,7 +171,6 @@ export async function fetchOrderById(orderId: string) {
       },
       body: JSON.stringify({ query: operation }),
       cache: "no-store",
-      next: { revalidate: 0 },
     });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
