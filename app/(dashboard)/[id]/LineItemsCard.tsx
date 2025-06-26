@@ -124,7 +124,6 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
 const LineItemDiscountedPrice = ({ lineItem }: { lineItem: LineItem }) => {
   const { originalUnitPriceSet, discountedUnitPriceAfterAllDiscountsSet } =
     lineItem;
-  console.log(lineItem);
 
   //if discount for line item is applied
   if (
@@ -165,7 +164,11 @@ const LineItemDiscountedPrice = ({ lineItem }: { lineItem: LineItem }) => {
 const LineItemImage = ({ image }: { image?: ShopifyImage | null }) => {
   const [imageError, setImageError] = useState<boolean>(false);
   if (!image || imageError) {
-    return <ImageIcon className="text-muted-foreground" size={50} />;
+    return (
+      <div className="flex justify-center w-full">
+        <ImageIcon className="text-muted-foreground" size={25} />
+      </div>
+    );
   }
   return (
     <Image

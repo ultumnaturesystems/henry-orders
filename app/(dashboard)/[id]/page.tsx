@@ -23,9 +23,7 @@ const OrderSlugPage = async ({
 }) => {
   const { id } = await params;
   const order = await fetchOrderById(id);
-  console.log("order: ", order);
   const itemGroups = splitFulfilledLineItems(order);
-  console.log("itemGroups: ", itemGroups);
   return (
     <div className="max-w-6xl mx-auto py-5 space-y-4">
       {/* Main Order Card */}
