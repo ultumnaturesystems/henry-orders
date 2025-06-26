@@ -155,6 +155,7 @@ export interface LineItem {
 
 export interface ShippingLine {
   title: string;
+  currentDiscountedPriceSet: MoneyBag;
 }
 
 export interface Image {

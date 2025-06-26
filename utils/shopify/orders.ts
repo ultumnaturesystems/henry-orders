@@ -110,6 +110,9 @@ export async function fetchOrderById(orderId: string) {
                         shippingLines(first:10){
                             nodes{
                                 title
+                                currentDiscountedPriceSet{
+                                    ${presentmentMoney}
+                                }
                             }
                         }
                         tags

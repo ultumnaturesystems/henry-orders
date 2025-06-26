@@ -104,9 +104,7 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
                   <TableCell
                     style={{ textAlign: "center" }}
                   >{`${quantity}`}</TableCell>
-                  <TableCell
-                    style={{ textAlign: "center", paddingLeft: "25px" }}
-                  >
+                  <TableCell className="text-right">
                     {new Intl.NumberFormat("en-US", {
                       style: "currency",
                       currency:
