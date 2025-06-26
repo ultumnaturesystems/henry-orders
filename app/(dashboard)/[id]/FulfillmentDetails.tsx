@@ -66,6 +66,7 @@ const FulfillmentDetails = ({ fulfillment }: FulfillmentDetailsProps) => {
         </>
       );
 
+    case "OUT_FOR_DELIVERY":
     case "CONFIRMED":
     case "IN_TRANSIT":
       return (
