@@ -76,26 +76,30 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
               return (
                 <TableRow key={lineItem.id}>
                   <TableCell>
-                    <LineItemImage image={image} />
+                    <div className="flex justify-center w-full">
+                      <LineItemImage image={image} />
+                    </div>
                   </TableCell>
-                  <TableCell className="flex flex-col">
-                    <span className="font-semibold">{title}</span>
-                    {variantTitle !== "Default Title" && (
-                      <Badge variant="secondary" className="bg-gray-200">
-                        {variantTitle}
-                      </Badge>
-                    )}
-                    {discountAllocations.length > 0 && (
-                      <div className="flex gap-1 items-center text-sm text-muted-foreground">
-                        <BadgeDollarSign size="16" />
-                        <span>
-                          {discountAllocations[0].discountApplication.value
-                            .__typename === "MoneyV2"
-                            ? `Discount (-$${discountAllocations[0].discountApplication.value.amount})`
-                            : `Discount (-${discountAllocations[0].discountApplication.value.percentage}%)`}
-                        </span>
-                      </div>
-                    )}
+                  <TableCell>
+                    <div className="flex flex-col justify-center h-full">
+                      <span className="font-semibold">{title}</span>
+                      {variantTitle !== "Default Title" && (
+                        <Badge variant="secondary" className="bg-gray-200">
+                          {variantTitle}
+                        </Badge>
+                      )}
+                      {discountAllocations.length > 0 && (
+                        <div className="flex gap-1 items-center text-sm text-muted-foreground">
+                          <BadgeDollarSign size="16" />
+                          <span>
+                            {discountAllocations[0].discountApplication.value
+                              .__typename === "MoneyV2"
+                              ? `Discount (-$${discountAllocations[0].discountApplication.value.amount})`
+                              : `Discount (-${discountAllocations[0].discountApplication.value.percentage}%)`}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell className="text-end">
                     <LineItemDiscountedPrice lineItem={lineItem} />
@@ -164,11 +168,7 @@ const LineItemDiscountedPrice = ({ lineItem }: { lineItem: LineItem }) => {
 const LineItemImage = ({ image }: { image?: ShopifyImage | null }) => {
   const [imageError, setImageError] = useState<boolean>(false);
   if (!image || imageError) {
-    return (
-      <div className="flex justify-center w-full">
-        <ImageIcon className="text-muted-foreground" size={25} />
-      </div>
-    );
+    return <ImageIcon className="text-muted-foreground" size={25} />;
   }
   return (
     <Image
