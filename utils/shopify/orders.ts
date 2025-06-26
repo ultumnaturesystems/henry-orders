@@ -102,6 +102,7 @@ export async function fetchOrderById(orderId: string) {
                                 title
                                 name
                                 quantity
+                                currentQuantity
                                 unfulfilledQuantity
                                 sku
                                 variant{
