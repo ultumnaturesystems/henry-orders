@@ -30,7 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Analytics />
-        <NextTopLoader />
+        <NextTopLoader showSpinner={false} />
         {children}
       </body>
     </html>

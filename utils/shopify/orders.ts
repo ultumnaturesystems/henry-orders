@@ -104,6 +104,20 @@ export async function fetchOrderById(orderId: string) {
                         }
                         originalTotalPriceSet{
                             ${presentmentMoney}
+                        }        
+                        discountApplications(first:100){
+                            nodes{
+                                value{
+                                    __typename
+                                    ... on MoneyV2{
+                                        amount
+                                        currencyCode
+                                    }
+                                    ... on PricingPercentageValue{
+                                        percentage
+                                    }
+                                }
+                            }
                         }              
                         displayFinancialStatus
                         displayFulfillmentStatus

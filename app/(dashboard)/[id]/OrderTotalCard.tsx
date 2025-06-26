@@ -18,6 +18,7 @@ const OrderTotalCard = ({ order }: OrderTotalCardProps) => {
     currentSubtotalPriceSet,
     currentTotalPriceSet,
     shippingLines,
+    discountApplications,
   } = order;
 
   const totalItems = lineItems.nodes.reduce(
@@ -61,11 +62,13 @@ const OrderTotalCard = ({ order }: OrderTotalCardProps) => {
                 }).format(originalTotalCost)}
               </TableCell>
             </TableRow>
-            <TableRow>
-              <TableCell>Discounts</TableCell>
-              <TableCell />
-              <TableCell className="text-right"></TableCell>
-            </TableRow>
+            {discountApplications.nodes.length > 0 && (
+              <TableRow>
+                <TableCell>Discounts</TableCell>
+                <TableCell />
+                <TableCell className="text-right"></TableCell>
+              </TableRow>
+            )}
             {shippingLines.nodes.map((line, index) => (
               <TableRow
                 key={`${line.title}-${index}`}
