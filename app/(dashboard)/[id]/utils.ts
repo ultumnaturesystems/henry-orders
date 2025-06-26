@@ -42,7 +42,7 @@ export function splitFulfilledLineItems(order: Order) {
         } else {
           const { id: currId } = lineItem;
           if (
-            itemGroups.some((group) =>
+            itemGroups.every((group) =>
               group.nodes.every((item) => item.id !== currId)
             )
           )
