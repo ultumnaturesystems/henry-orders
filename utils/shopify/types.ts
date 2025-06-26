@@ -38,6 +38,19 @@ export type DisplayFulfillmentStatus =
   | "SCHEDULED"
   | "UNFULFILLED";
 
+export interface DiscountApplication {
+  value: {
+    __typename: "MoneyV2" | "PricingPercentageValue";
+    amount?: number;
+    percentage?: number;
+  };
+}
+
+export interface DiscountAllocation {
+  allocatedAmountSet: { presentmentMoney: MoneyV2 };
+  discountApplication: DiscountApplication;
+}
+
 export interface Customer {
   id: string;
   firstName: string;
@@ -63,11 +76,12 @@ export interface Address {
   zip: string;
 }
 
-interface PriceSet {
-  presentmentMoney: PresentmentMoney;
+interface MoneyBag {
+  presentmentMoney: MoneyV2;
+  shopMoney?: MoneyV2;
 }
 
-interface PresentmentMoney {
+interface MoneyV2 {
   amount: number;
   currencyCode: string;
 }
@@ -88,6 +102,7 @@ export interface OrderByIDResponse {
   data: {
     order: Order;
   };
+  errors?: any;
   extensions: Extensions;
 }
 
@@ -108,9 +123,10 @@ export interface Order {
   createdAt: string;
   customer: Customer;
   closed: boolean;
-  currentSubtotalPriceSet: PriceSet;
-  currentTotalPriceSet: PriceSet;
-  currentShippingPriceSet: PriceSet;
+  currentSubtotalPriceSet: MoneyBag;
+  currentTotalPriceSet: MoneyBag;
+  currentShippingPriceSet: MoneyBag;
+  originalTotalPriceSet: MoneyBag;
   shippingLines: { nodes: ShippingLine[] };
   displayFinancialStatus: DisplayFinancialStatus;
   displayFulfillmentStatus: DisplayFulfillmentStatus;
@@ -130,13 +146,11 @@ export interface LineItem {
   variant: {
     title: string;
   };
+  discountedUnitPriceAfterAllDiscountsSet: MoneyBag;
+  discountedTotalSet: MoneyBag;
+  discountAllocations: DiscountAllocation[];
   image: Image | null;
-  originalUnitPriceSet: {
-    presentmentMoney: {
-      amount: number;
-      currencyCode: string;
-    };
-  };
+  originalUnitPriceSet: MoneyBag;
 }
 
 export interface ShippingLine {

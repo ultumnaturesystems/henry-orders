@@ -26,6 +26,20 @@ const OrderTotalCard = ({ order }: OrderTotalCardProps) => {
     0
   );
 
+  const originalTotalCost = lineItems.nodes.reduce(
+    (
+      total: number,
+      {
+        originalUnitPriceSet,
+        quantity,
+      }: {
+        originalUnitPriceSet: { presentmentMoney: { amount: number } };
+        quantity: number;
+      }
+    ) => total + originalUnitPriceSet.presentmentMoney.amount * quantity,
+    0
+  );
+
   return (
     <Card className="gap-3">
       <CardContent>
@@ -40,7 +54,7 @@ const OrderTotalCard = ({ order }: OrderTotalCardProps) => {
                   style: "currency",
                   currency:
                     currentSubtotalPriceSet.presentmentMoney.currencyCode,
-                }).format(currentSubtotalPriceSet.presentmentMoney.amount)}
+                }).format(originalTotalCost)}
               </TableCell>
             </TableRow>
             <TableRow>

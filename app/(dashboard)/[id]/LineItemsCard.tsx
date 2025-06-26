@@ -6,6 +6,8 @@ import {
   Image as ShopifyImage,
   LineItem,
   Fulfillment,
+  DiscountApplication,
+  DiscountAllocation,
 } from "@/utils/shopify/types";
 import Image from "next/image";
 import { Image as ImageIcon, PackageOpen, Truck } from "lucide-react";
@@ -53,9 +55,20 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
         <Table>
           <TableBody>
             {lineItems.map((lineItem) => {
-              const { image, originalUnitPriceSet, quantity, title, variant } =
-                lineItem;
-              const { title: variantTitle } = variant;
+              const {
+                image,
+                originalUnitPriceSet,
+                quantity,
+                title,
+                variant,
+                discountedTotalSet,
+              } = lineItem;
+              const {
+                presentmentMoney: { amount },
+              } = discountedTotalSet;
+              const { title: variantTitle } = variant || {
+                title: "Default Title",
+              };
               return (
                 <TableRow key={lineItem.id}>
                   <TableCell>
@@ -69,14 +82,9 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
                       </Badge>
                     )}
                   </TableCell>
-                  <TableCell>
-                    {new Intl.NumberFormat("en-US", {
-                      style: "currency",
-                      currency:
-                        originalUnitPriceSet.presentmentMoney.currencyCode,
-                    }).format(originalUnitPriceSet.presentmentMoney.amount)}
+                  <TableCell className="text-end">
+                    <LineItemDiscountedPrice lineItem={lineItem} />
                   </TableCell>
-
                   <TableCell>x</TableCell>
                   <TableCell
                     style={{ textAlign: "center" }}
@@ -87,10 +95,8 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
                     {new Intl.NumberFormat("en-US", {
                       style: "currency",
                       currency:
-                        originalUnitPriceSet.presentmentMoney.currencyCode,
-                    }).format(
-                      originalUnitPriceSet.presentmentMoney.amount * quantity
-                    )}
+                        originalUnitPriceSet.presentmentMoney?.currencyCode,
+                    }).format(amount)}
                   </TableCell>
                 </TableRow>
               );
@@ -99,6 +105,47 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
         </Table>
       </CardContent>
     </Card>
+  );
+};
+
+const LineItemDiscountedPrice = ({ lineItem }: { lineItem: LineItem }) => {
+  const { originalUnitPriceSet, discountedUnitPriceAfterAllDiscountsSet } =
+    lineItem;
+  console.log(lineItem);
+
+  //if discount for line item is applied
+  if (
+    originalUnitPriceSet.presentmentMoney.amount !==
+    discountedUnitPriceAfterAllDiscountsSet.presentmentMoney.amount
+  ) {
+    return (
+      <>
+        <span className="line-through text-muted-foreground mr-2">
+          {new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: originalUnitPriceSet.presentmentMoney.currencyCode,
+          }).format(originalUnitPriceSet.presentmentMoney.amount)}
+        </span>
+        <span>
+          {new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency:
+              discountedUnitPriceAfterAllDiscountsSet.presentmentMoney
+                .currencyCode,
+          }).format(
+            discountedUnitPriceAfterAllDiscountsSet.presentmentMoney.amount
+          )}
+        </span>
+      </>
+    );
+  }
+  return (
+    <span>
+      {new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: originalUnitPriceSet.presentmentMoney.currencyCode,
+      }).format(originalUnitPriceSet.presentmentMoney.amount)}
+    </span>
   );
 };
 

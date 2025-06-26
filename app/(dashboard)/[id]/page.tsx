@@ -13,6 +13,9 @@ import Link from "next/link";
 import OrderTotalCard from "./OrderTotalCard";
 import { splitFulfilledLineItems } from "./utils";
 
+// Force dynamic rendering and disable caching
+export const revalidate = 0;
+
 const OrderSlugPage = async ({
   params,
 }: {
@@ -20,7 +23,9 @@ const OrderSlugPage = async ({
 }) => {
   const { id } = await params;
   const order = await fetchOrderById(id);
+  console.log("order: ", order);
   const itemGroups = splitFulfilledLineItems(order);
+  console.log("itemGroups: ", itemGroups);
   return (
     <div className="max-w-6xl mx-auto py-5 space-y-4">
       {/* Main Order Card */}

@@ -23,6 +23,7 @@ export function splitFulfilledLineItems(order: Order) {
       fulfillmentLineItems: { nodes },
     } = fulfillment;
     const items = nodes.map(({ lineItem }) => lineItem);
+    console.log("util lineitem: ", items);
     const group = {
       nodes: items,
       type: "FULFILLED" as FulfillmentStatus,
