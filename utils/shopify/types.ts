@@ -124,6 +124,7 @@ export interface LineItem {
   title: string;
   name: string;
   quantity: number;
+  currentQuantity: number;
   unfulfilledQuantity: number;
   sku: string;
   variant: {
