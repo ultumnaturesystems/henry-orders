@@ -90,17 +90,23 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
                           {variantTitle}
                         </Badge>
                       )}
-                      {discountAllocations.length > 0 && (
-                        <div className="flex gap-1 items-center text-sm text-muted-foreground">
-                          <BadgeDollarSign size="16" />
-                          <span>
-                            {discountAllocations[0].discountApplication.value
-                              .__typename === "MoneyV2"
-                              ? `Discount (-$${discountAllocations[0].discountApplication.value.amount})`
-                              : `Discount (-${discountAllocations[0].discountApplication.value.percentage}%)`}
-                          </span>
-                        </div>
-                      )}
+                      {discountAllocations.length > 0 &&
+                        discountAllocations
+                          .filter(
+                            (discount) =>
+                              discount.discountApplication.allocationMethod !==
+                              "ACROSS"
+                          )
+                          .map(({ discountApplication: { value } }) => (
+                            <div className="flex gap-1 items-center text-sm text-muted-foreground">
+                              <BadgeDollarSign size="16" />
+                              <span>
+                                {value.__typename === "MoneyV2"
+                                  ? `Discount (-$${value.amount})`
+                                  : `Discount (-${value.percentage}%)`}
+                              </span>
+                            </div>
+                          ))}
                     </div>
                   </TableCell>
                   <TableCell className="text-end">
@@ -128,13 +134,19 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
 };
 
 const LineItemDiscountedPrice = ({ lineItem }: { lineItem: LineItem }) => {
-  const { originalUnitPriceSet, discountedUnitPriceAfterAllDiscountsSet } =
-    lineItem;
-
+  const {
+    originalUnitPriceSet,
+    discountedUnitPriceAfterAllDiscountsSet,
+    discountAllocations,
+  } = lineItem;
+  const discountMethods = discountAllocations.map(
+    ({ discountApplication: { allocationMethod } }) => allocationMethod
+  );
   //if discount for line item is applied
   if (
     originalUnitPriceSet.presentmentMoney.amount !==
-    discountedUnitPriceAfterAllDiscountsSet.presentmentMoney.amount
+      discountedUnitPriceAfterAllDiscountsSet.presentmentMoney.amount &&
+    discountMethods.includes("EACH")
   ) {
     return (
       <>

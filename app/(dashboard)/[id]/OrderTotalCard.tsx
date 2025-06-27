@@ -16,6 +16,7 @@ const OrderTotalCard = ({ order }: OrderTotalCardProps) => {
   const {
     lineItems,
     currentSubtotalPriceSet,
+    originalTotalPriceSet,
     currentTotalPriceSet,
     shippingLines,
     discountApplications,
@@ -57,9 +58,8 @@ const OrderTotalCard = ({ order }: OrderTotalCardProps) => {
               <TableCell className="text-right">
                 {new Intl.NumberFormat("en-US", {
                   style: "currency",
-                  currency:
-                    currentSubtotalPriceSet.presentmentMoney.currencyCode,
-                }).format(originalTotalCost)}
+                  currency: originalTotalPriceSet.presentmentMoney.currencyCode,
+                }).format(originalTotalPriceSet.presentmentMoney.amount)}
               </TableCell>
             </TableRow>
             {discountApplications.nodes.length > 0 && (
