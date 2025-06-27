@@ -35,7 +35,7 @@ const Orders = ({ orders }: OrdersProps) => {
         onChange={(e) => {
           setSearch(e.target.value);
         }}
-        className="mb-4"
+        className="mb-2 bg-white"
       />
       <DataTable data={filteredOrders} columns={columns} />
     </div>
