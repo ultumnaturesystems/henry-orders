@@ -39,6 +39,7 @@ export type DisplayFulfillmentStatus =
   | "UNFULFILLED";
 
 export interface DiscountApplication {
+  allocationMethod: "ACROSS" | "EACH";
   value: {
     __typename: "MoneyV2" | "PricingPercentageValue";
     amount?: number;
@@ -55,6 +56,7 @@ export interface Customer {
   id: string;
   firstName: string;
   lastName: string;
+  displayName: string;
   email: string;
   phone: string | null;
   createdAt: string;
@@ -134,6 +136,7 @@ export interface Order {
   fulfillments: Fulfillment[];
   lineItems: { nodes: LineItem[] };
   tags: string[];
+  totalReceivedSet: MoneyBag;
 }
 
 export interface LineItem {

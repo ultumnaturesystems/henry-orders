@@ -33,6 +33,7 @@ const lineitemFields = `
                 }
             }
             discountApplication{
+                allocationMethod
                 value{
                     __typename
                     ... on MoneyV2{
@@ -78,6 +79,7 @@ export async function fetchOrderById(orderId: string) {
                             id
                             firstName
                             lastName
+                            displayName
                             email
                             numberOfOrders
                             defaultAddress{
@@ -157,6 +159,9 @@ export async function fetchOrderById(orderId: string) {
                             nodes{
                                 ${lineitemFields}
                             }
+                        }
+                        totalReceivedSet{
+                            ${presentmentMoney}
                         }
                     }
                 }
