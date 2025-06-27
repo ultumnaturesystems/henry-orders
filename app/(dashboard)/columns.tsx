@@ -15,46 +15,34 @@ import {
 // You can use a Zod schema here if you want.
 
 export const columns: ColumnDef<Order>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+  // {
+  //   id: "select",
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={
+  //         table.getIsAllPageRowsSelected() ||
+  //         (table.getIsSomePageRowsSelected() && "indeterminate")
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
     accessorKey: "name",
     header: ({ column }) => {
       return <DataTableColumnHeader column={column} title="Name" />;
     },
-    cell: ({ cell, row }) => {
-      const orderId = row.original.id.replace("gid://shopify/Order/", "");
-      return (
-        <div>
-          <Link
-            href={`/${orderId}`}
-            style={{ textDecoration: "underline", color: "black" }}
-          >
-            {cell.getValue<string>()}
-          </Link>
-        </div>
-      );
-    },
+    cell: ({ cell }) => <div>{cell.getValue<string>()}</div>,
   },
   {
     accessorKey: "createdAt",
