@@ -47,7 +47,6 @@ export function DataTable<TData, TValue>({
       sorting,
     },
   });
-
   return (
     <div className="rounded-md border bg-white">
       <div className="border-b">

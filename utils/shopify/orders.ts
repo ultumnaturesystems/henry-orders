@@ -9,6 +9,21 @@ const presentmentMoney = `
         currencyCode
     }`;
 
+const discountApplication = `
+    allocationMethod
+    targetSelection
+    value{
+        __typename
+        ... on MoneyV2{
+            amount
+            currencyCode
+        }
+        ... on PricingPercentageValue{
+            percentage
+        }
+    }
+`;
+
 const lineitemFields = `
         id
         title
@@ -33,17 +48,7 @@ const lineitemFields = `
                 }
             }
             discountApplication{
-                allocationMethod
-                value{
-                    __typename
-                    ... on MoneyV2{
-                        amount
-                        currencyCode
-                    }
-                    ... on PricingPercentageValue{
-                        percentage
-                    }
-                }
+                ${discountApplication}
             }
         }
         originalUnitPriceSet{
@@ -109,16 +114,7 @@ export async function fetchOrderById(orderId: string) {
                         }        
                         discountApplications(first:100){
                             nodes{
-                                value{
-                                    __typename
-                                    ... on MoneyV2{
-                                        amount
-                                        currencyCode
-                                    }
-                                    ... on PricingPercentageValue{
-                                        percentage
-                                    }
-                                }
+                                ${discountApplication}
                             }
                         }              
                         displayFinancialStatus
@@ -162,6 +158,21 @@ export async function fetchOrderById(orderId: string) {
                         }
                         totalReceivedSet{
                             ${presentmentMoney}
+                        }
+                        totalDiscountsSet{
+                            ${presentmentMoney}
+                        }
+                        taxLines{
+                            rate
+                            ratePercentage
+                            title
+                            priceSet{
+                                presentmentMoney{
+                                    amount
+                                    currencyCode
+                                }
+                            }
+                            source
                         }
                     }
                 }

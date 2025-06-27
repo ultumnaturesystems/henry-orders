@@ -1,4 +1,9 @@
-import { Fulfillment, LineItem, Order } from "@/utils/shopify/types";
+import {
+  Fulfillment,
+  LineItem,
+  Order,
+  DiscountAllocation,
+} from "@/utils/shopify/types";
 
 type FulfillmentStatus = "FULFILLED" | "UNFULFILLED" | "REMOVED";
 
@@ -67,4 +72,13 @@ export function splitFulfilledLineItems(order: Order) {
     if (!a.type && b.type) return -1;
     return 0;
   });
+}
+
+export function hasLineItemLevelDiscount(
+  discountAllocations: DiscountAllocation[]
+) {
+  let targetSelection = new Set(
+    discountAllocations.map((d) => d.discountApplication.targetSelection)
+  );
+  return targetSelection.has("ENTITLED") || targetSelection.has("EXPLICIT");
 }

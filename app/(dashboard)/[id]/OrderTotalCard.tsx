@@ -20,6 +20,8 @@ const OrderTotalCard = ({ order }: OrderTotalCardProps) => {
     currentTotalPriceSet,
     shippingLines,
     discountApplications,
+    totalDiscountsSet,
+    taxLines,
   } = order;
 
   const totalItems = lineItems.nodes.reduce(
@@ -31,18 +33,15 @@ const OrderTotalCard = ({ order }: OrderTotalCardProps) => {
     (
       total: number,
       {
-        discountedUnitPriceAfterAllDiscountsSet,
+        originalUnitPriceSet,
         currentQuantity,
       }: {
-        discountedUnitPriceAfterAllDiscountsSet: {
+        originalUnitPriceSet: {
           presentmentMoney: { amount: number };
         };
         currentQuantity: number;
       }
-    ) =>
-      total +
-      discountedUnitPriceAfterAllDiscountsSet.presentmentMoney.amount *
-        currentQuantity,
+    ) => total + originalUnitPriceSet.presentmentMoney.amount * currentQuantity,
     0
   );
 
@@ -59,14 +58,20 @@ const OrderTotalCard = ({ order }: OrderTotalCardProps) => {
                 {new Intl.NumberFormat("en-US", {
                   style: "currency",
                   currency: originalTotalPriceSet.presentmentMoney.currencyCode,
-                }).format(originalTotalPriceSet.presentmentMoney.amount)}
+                }).format(originalTotalCost)}
               </TableCell>
             </TableRow>
             {discountApplications.nodes.length > 0 && (
               <TableRow>
                 <TableCell>Discounts</TableCell>
                 <TableCell />
-                <TableCell className="text-right"></TableCell>
+                <TableCell className="text-right">
+                  -
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: totalDiscountsSet.presentmentMoney.currencyCode,
+                  }).format(totalDiscountsSet.presentmentMoney.amount)}
+                </TableCell>
               </TableRow>
             )}
             {shippingLines.nodes.map((line, index) => (
@@ -91,6 +96,23 @@ const OrderTotalCard = ({ order }: OrderTotalCardProps) => {
                   }).format(
                     line.currentDiscountedPriceSet.presentmentMoney.amount
                   )}
+                </TableCell>
+              </TableRow>
+            ))}
+            {taxLines.map((taxLine, index) => (
+              <TableRow
+                key={`${taxLine.title}-${index}`}
+                className={
+                  index !== taxLines.length - 1 ? "border-b-0 mb-0" : ""
+                }
+              >
+                <TableCell>{index === 0 ? "Taxes" : ""}</TableCell>
+                <TableCell>{`${taxLine.title} ${taxLine.ratePercentage}%`}</TableCell>
+                <TableCell className="text-right">
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: taxLine.priceSet.presentmentMoney.currencyCode,
+                  }).format(taxLine.priceSet.presentmentMoney.amount)}
                 </TableCell>
               </TableRow>
             ))}
