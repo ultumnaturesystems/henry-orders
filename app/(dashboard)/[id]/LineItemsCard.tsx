@@ -49,7 +49,7 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
       </CardHeader>
       <CardContent>
         {type === "FULFILLED" && (
-          <section className="px-3 py-2 border rounded-lg">
+          <section className="px-3 py-2 border rounded-lg mb-2">
             <div className="flex flex-col text-sm">
               <FulfillmentDetails fulfillment={fulfillment} />
             </div>

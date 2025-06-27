@@ -39,7 +39,7 @@ const OrderSlugPage = async ({
             <Badge
               variant="outline"
               style={financialStatusVariant[order.displayFinancialStatus]}
-              className="ml-4"
+              className="ml-4 "
             >
               {order.displayFinancialStatus}
             </Badge>
@@ -72,7 +72,7 @@ const OrderSlugPage = async ({
         </span>
       </section>
 
-      <div className="flex flex-row space-x-6 ">
+      <div className="flex flex-row space-x-6">
         <div className="flex-1 max-w-4xl space-y-4">
           {itemGroups?.map((group, index) => (
             <LineItemsCard key={index} itemGroup={group} />

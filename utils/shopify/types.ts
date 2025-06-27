@@ -221,7 +221,7 @@ export const fulfillmentStatusVariant: Record<
   DisplayFulfillmentStatus,
   { label: string; backgroundColor: string }
 > = {
-  FULFILLED: { label: "Fulfilled", backgroundColor: "" },
+  FULFILLED: { label: "Fulfilled", backgroundColor: "white" },
   PARTIALLY_FULFILLED: {
     label: "Partially Fulfilled",
     backgroundColor: "rgba(255, 214, 164, 1)",
