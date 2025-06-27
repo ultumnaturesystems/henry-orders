@@ -27,7 +27,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased `}
+        style={{ background: "rgba(241, 241, 241, 1)" }}
       >
         <NextTopLoader />
         <NavigationMenu />

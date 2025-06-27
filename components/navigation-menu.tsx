@@ -43,7 +43,7 @@ export default function NavigationMenu() {
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="mt-2 w-full rounded-md border border-gray-200"
+          className="mt-2 w-full rounded-md border border-gray-200 bg-white"
           align="end"
         >
           <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>

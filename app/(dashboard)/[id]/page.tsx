@@ -12,6 +12,7 @@ import LineItemsCard from "./LineItemsCard";
 import Link from "next/link";
 import OrderTotalCard from "./OrderTotalCard";
 import { splitFulfilledLineItems } from "./utils";
+import { Button } from "@/components/ui/button";
 
 // Force dynamic rendering and disable caching
 export const revalidate = 0;
@@ -27,42 +28,57 @@ const OrderSlugPage = async ({
   return (
     <div className="max-w-6xl mx-auto py-5 space-y-4">
       {/* Main Order Card */}
-      <section className="flex flex-col">
-        <div className="text-2xl font-bold flex items-center">
-          <Link href="/" className="text-decoration-none">
-            <InboxIcon className="mr-2" />
-          </Link>
-          <ChevronRight size={16} className="mr-2" />
-          <h1>{order.name}</h1>
-          <Badge
-            variant="outline"
-            style={financialStatusVariant[order.displayFinancialStatus]}
-            className="ml-4"
-          >
-            {order.displayFinancialStatus}
-          </Badge>
-          <Badge
-            variant="secondary"
-            style={fulfillmentStatusVariant[order.displayFulfillmentStatus]}
-            className="ml-2"
-          >
-            {order.displayFulfillmentStatus}
-          </Badge>
-          {order.closed && (
-            <Badge variant="outline" className="ml-2">
-              Archived
+      <section className="flex flex-col h-full">
+        <div className="flex justify-between">
+          <div className="text-2xl font-bold flex items-center ">
+            <Link href="/" className="text-decoration-none">
+              <InboxIcon className="mr-2" />
+            </Link>
+            <ChevronRight size={16} className="mr-2" />
+            <h1>{order.name}</h1>
+            <Badge
+              variant="outline"
+              style={financialStatusVariant[order.displayFinancialStatus]}
+              className="ml-4 "
+            >
+              {order.displayFinancialStatus}
             </Badge>
-          )}
+            <Badge
+              variant="secondary"
+              style={fulfillmentStatusVariant[order.displayFulfillmentStatus]}
+              className="ml-2"
+            >
+              {order.displayFulfillmentStatus}
+            </Badge>
+            {order.closed && (
+              <Badge variant="outline" className="ml-2">
+                Archived
+              </Badge>
+            )}
+          </div>
+          <Link href={`/${id}/invoice`} className="no-underline">
+            <Button
+              variant="outline"
+              size="sm"
+              className="cursor-pointer active:scale-95 transition-transform"
+            >
+              View Invoice
+            </Button>
+          </Link>
+          {/* <PrintButton order={order} /> */}
         </div>
         <span className="flex items-center text-sm text-muted-foreground">
           {new Date(order.createdAt).toLocaleString()}
         </span>
       </section>
 
-      <div className="flex flex-row space-x-6 ">
+      <div className="flex flex-row space-x-6">
         <div className="flex-1 max-w-4xl space-y-4">
-          {itemGroups?.map((group, index) => (
-            <LineItemsCard key={index} itemGroup={group} />
+          {itemGroups?.map((group) => (
+            <LineItemsCard
+              key={`${group.type}-${group.fulfillment?.id}-${group.fulfillment?.name}`}
+              itemGroup={group}
+            />
           ))}
           <OrderTotalCard order={order} />
         </div>

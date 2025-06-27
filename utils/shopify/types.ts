@@ -38,7 +38,22 @@ export type DisplayFulfillmentStatus =
   | "SCHEDULED"
   | "UNFULFILLED";
 
+export type DiscountApplicationTargetSelection =
+  | "ALL"
+  | "ENTITLED"
+  | "EXPLICIT";
+
+export interface TaxLine {
+  rate: number;
+  ratePercentage: number;
+  title: string;
+  priceSet: MoneyBag;
+  source: string;
+}
+
 export interface DiscountApplication {
+  allocationMethod: "ACROSS" | "EACH";
+  targetSelection: DiscountApplicationTargetSelection;
   value: {
     __typename: "MoneyV2" | "PricingPercentageValue";
     amount?: number;
@@ -55,6 +70,7 @@ export interface Customer {
   id: string;
   firstName: string;
   lastName: string;
+  displayName: string;
   email: string;
   phone: string | null;
   createdAt: string;
@@ -126,7 +142,7 @@ export interface Order {
   currentSubtotalPriceSet: MoneyBag;
   currentTotalPriceSet: MoneyBag;
   currentShippingPriceSet: MoneyBag;
-  discountApplications: { nodes: { value: DiscountApplication }[] };
+  discountApplications: { nodes: DiscountApplication[] };
   originalTotalPriceSet: MoneyBag;
   shippingLines: { nodes: ShippingLine[] };
   displayFinancialStatus: DisplayFinancialStatus;
@@ -134,6 +150,9 @@ export interface Order {
   fulfillments: Fulfillment[];
   lineItems: { nodes: LineItem[] };
   tags: string[];
+  totalReceivedSet: MoneyBag;
+  totalDiscountsSet: MoneyBag;
+  taxLines: TaxLine[];
 }
 
 export interface LineItem {
@@ -218,7 +237,7 @@ export const fulfillmentStatusVariant: Record<
   DisplayFulfillmentStatus,
   { label: string; backgroundColor: string }
 > = {
-  FULFILLED: { label: "Fulfilled", backgroundColor: "" },
+  FULFILLED: { label: "Fulfilled", backgroundColor: "white" },
   PARTIALLY_FULFILLED: {
     label: "Partially Fulfilled",
     backgroundColor: "rgba(255, 214, 164, 1)",

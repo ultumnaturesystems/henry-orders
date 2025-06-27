@@ -9,6 +9,21 @@ const presentmentMoney = `
         currencyCode
     }`;
 
+const discountApplication = `
+    allocationMethod
+    targetSelection
+    value{
+        __typename
+        ... on MoneyV2{
+            amount
+            currencyCode
+        }
+        ... on PricingPercentageValue{
+            percentage
+        }
+    }
+`;
+
 const lineitemFields = `
         id
         title
@@ -33,16 +48,7 @@ const lineitemFields = `
                 }
             }
             discountApplication{
-                value{
-                    __typename
-                    ... on MoneyV2{
-                        amount
-                        currencyCode
-                    }
-                    ... on PricingPercentageValue{
-                        percentage
-                    }
-                }
+                ${discountApplication}
             }
         }
         originalUnitPriceSet{
@@ -78,6 +84,7 @@ export async function fetchOrderById(orderId: string) {
                             id
                             firstName
                             lastName
+                            displayName
                             email
                             numberOfOrders
                             defaultAddress{
@@ -107,16 +114,7 @@ export async function fetchOrderById(orderId: string) {
                         }        
                         discountApplications(first:100){
                             nodes{
-                                value{
-                                    __typename
-                                    ... on MoneyV2{
-                                        amount
-                                        currencyCode
-                                    }
-                                    ... on PricingPercentageValue{
-                                        percentage
-                                    }
-                                }
+                                ${discountApplication}
                             }
                         }              
                         displayFinancialStatus
@@ -157,6 +155,24 @@ export async function fetchOrderById(orderId: string) {
                             nodes{
                                 ${lineitemFields}
                             }
+                        }
+                        totalReceivedSet{
+                            ${presentmentMoney}
+                        }
+                        totalDiscountsSet{
+                            ${presentmentMoney}
+                        }
+                        taxLines{
+                            rate
+                            ratePercentage
+                            title
+                            priceSet{
+                                presentmentMoney{
+                                    amount
+                                    currencyCode
+                                }
+                            }
+                            source
                         }
                     }
                 }

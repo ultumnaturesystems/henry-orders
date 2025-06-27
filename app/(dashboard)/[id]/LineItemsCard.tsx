@@ -17,6 +17,7 @@ import {
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import FulfillmentDetails from "./FulfillmentDetails";
+import { hasLineItemLevelDiscount } from "./utils";
 
 interface LineItemsCardProps {
   itemGroup: {
@@ -33,7 +34,6 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
     0
   );
   const { badgeColor, icon, title } = getFulfillmentItemStatus(type);
-
   return (
     <Card className="gap-2">
       <CardHeader>
@@ -49,7 +49,7 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
       </CardHeader>
       <CardContent>
         {type === "FULFILLED" && (
-          <section className="px-3 py-2 border rounded-lg">
+          <section className="px-3 py-2 border rounded-lg mb-2">
             <div className="flex flex-col text-sm">
               <FulfillmentDetails fulfillment={fulfillment} />
             </div>
@@ -70,9 +70,14 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
               const {
                 presentmentMoney: { amount },
               } = discountedTotalSet;
+
               const { title: variantTitle } = variant || {
                 title: "Default Title",
               };
+
+              const isLineItemLevelDiscount =
+                hasLineItemLevelDiscount(discountAllocations);
+
               return (
                 <TableRow key={lineItem.id}>
                   <TableCell>
@@ -90,17 +95,22 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
                           {variantTitle}
                         </Badge>
                       )}
-                      {discountAllocations.length > 0 && (
-                        <div className="flex gap-1 items-center text-sm text-muted-foreground">
-                          <BadgeDollarSign size="16" />
-                          <span>
-                            {discountAllocations[0].discountApplication.value
-                              .__typename === "MoneyV2"
-                              ? `Discount (-$${discountAllocations[0].discountApplication.value.amount})`
-                              : `Discount (-${discountAllocations[0].discountApplication.value.percentage}%)`}
-                          </span>
-                        </div>
-                      )}
+                      {isLineItemLevelDiscount &&
+                        discountAllocations.map(
+                          ({ discountApplication: { value } }, index) => (
+                            <div
+                              className="flex gap-1 items-center text-sm text-muted-foreground"
+                              key={`${value.__typename}-${index}`}
+                            >
+                              <BadgeDollarSign size="16" />
+                              <span>
+                                {value.__typename === "MoneyV2"
+                                  ? `Discount (-$${value.amount})`
+                                  : `Discount (-${value.percentage}%)`}
+                              </span>
+                            </div>
+                          )
+                        )}
                     </div>
                   </TableCell>
                   <TableCell className="text-end">
@@ -130,12 +140,13 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
 const LineItemDiscountedPrice = ({ lineItem }: { lineItem: LineItem }) => {
   const { originalUnitPriceSet, discountedUnitPriceAfterAllDiscountsSet } =
     lineItem;
-
   //if discount for line item is applied
-  if (
-    originalUnitPriceSet.presentmentMoney.amount !==
-    discountedUnitPriceAfterAllDiscountsSet.presentmentMoney.amount
-  ) {
+
+  const isLineItemLevelDiscount = hasLineItemLevelDiscount(
+    lineItem.discountAllocations
+  );
+
+  if (isLineItemLevelDiscount) {
     return (
       <>
         <span className="line-through text-muted-foreground mr-2">

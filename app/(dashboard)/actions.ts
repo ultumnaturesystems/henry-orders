@@ -2,12 +2,11 @@
 
 import { OrdersResponse } from "@/utils/shopify/types";
 import { client } from "@/utils/shopify/client";
-
 export async function fetchOrders() {
   try {
     const operation = `
             query {
-                orders(first: 75, query: "tag:'Henry'", sortKey: CREATED_AT, reverse: true) {
+                orders(first: 200, query: "tag:'Henry' NOT status:'cancelled'", sortKey: CREATED_AT, reverse: true) {
                     edges{
                         node{
                             id
@@ -23,6 +22,11 @@ export async function fetchOrders() {
                                 presentmentMoney{
                                     amount
                                     currencyCode
+                                }
+                            }
+                            discountApplications(first:10){
+                                nodes{
+                                    targetSelection
                                 }
                             }
                             displayFinancialStatus
