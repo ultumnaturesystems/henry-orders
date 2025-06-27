@@ -14,14 +14,7 @@ const OrdersPage = async () => {
 
   return (
     <div className="container mx-auto py-10">
-      <Orders
-        orders={orders.filter((order) => {
-          const discountSet = new Set(
-            order.discountApplications.nodes.map((d) => d.targetSelection)
-          );
-          return discountSet.size >= 1;
-        })}
-      />
+      <Orders orders={orders} />
     </div>
   );
 };

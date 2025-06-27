@@ -25,9 +25,6 @@ const OrderSlugPage = async ({
   const { id } = await params;
   const order = await fetchOrderById(id);
   const itemGroups = splitFulfilledLineItems(order);
-  console.log(
-    new Set(order?.discountApplications.nodes.map((d) => d.targetSelection))
-  );
   return (
     <div className="max-w-6xl mx-auto py-5 space-y-4">
       {/* Main Order Card */}

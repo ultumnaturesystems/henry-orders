@@ -34,7 +34,6 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
     0
   );
   const { badgeColor, icon, title } = getFulfillmentItemStatus(type);
-  console.log("key: ", `${type}-${fulfillment?.id}-${fulfillment?.name}`);
   return (
     <Card className="gap-2">
       <CardHeader>
