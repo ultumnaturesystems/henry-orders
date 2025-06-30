@@ -4,13 +4,14 @@ import { PasswordResetForm } from "@/components/password-reset-form";
 import { redirect } from "next/navigation";
 
 interface UpdatePasswordPageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ token_hash?: string; type?: string }>;
 }
 
 const UpdatePasswordPage = async ({
   searchParams,
 }: UpdatePasswordPageProps) => {
-  if (!searchParams.token_hash || !searchParams.type) {
+  const { token_hash, type } = await searchParams;
+  if (!token_hash || !type) {
     redirect("/");
   }
   return (
