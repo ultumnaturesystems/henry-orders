@@ -16,7 +16,7 @@ import { Check } from "lucide-react";
 import { forgotPassword } from "@/app/(auth)/forgot-password/actions";
 import { useState } from "react";
 
-export function ForgotPasswordForm({
+export function PasswordResetRequestForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
@@ -24,6 +24,8 @@ export function ForgotPasswordForm({
   const [invalidEmail, setInvalidEmail] = useState(false);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setEmailSent(false);
+    setInvalidEmail(false);
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
     await forgotPassword(email)
@@ -57,7 +59,7 @@ export function ForgotPasswordForm({
                 <ValidEmail />
               ) : (
                 <>
-                  <Button type="submit" className="w-full">
+                  <Button type="submit" className="w-full cursor-pointer">
                     Send Reset Link
                   </Button>
                   {invalidEmail && <InvalidEmail />}
