@@ -34,7 +34,7 @@ export default function RootLayout({
         <Analytics />
         <NextTopLoader showSpinner={false} />
         {children}
-        <Toaster />
+        <Toaster richColors={true} />
       </body>
     </html>
   );

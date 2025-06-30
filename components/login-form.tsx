@@ -16,6 +16,7 @@ import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export function LoginForm({
   className,
@@ -32,11 +33,29 @@ export function LoginForm({
       email: string;
       password: string;
     };
+
     try {
-      await login(data);
-      // Optionally redirect or handle success here
+      const result = await login(data);
+
+      // Handle returned error from server action
+      if (result?.error) {
+        toast.error(result.error);
+      }
+      // If successful, redirect happens in server action
     } catch (error) {
-      // Handle error (e.g., show error message)
+      // Check if it's a Next.js redirect error - if so, don't handle it
+      if (
+        error &&
+        typeof error === "object" &&
+        "digest" in error &&
+        (error as any).digest?.includes("NEXT_REDIRECT")
+      ) {
+        throw error; // Re-throw to allow redirect to work
+      }
+
+      // Handle actual errors
+      toast.error("An unexpected error occurred");
+      console.error("Login error:", error);
     } finally {
       setLoading(false);
     }
