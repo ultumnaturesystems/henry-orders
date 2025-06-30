@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import NextTopLoader from "nextjs-toploader";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
         <Analytics />
         <NextTopLoader showSpinner={false} />
         {children}
+        <Toaster />
       </body>
     </html>
   );
