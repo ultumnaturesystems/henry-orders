@@ -3,12 +3,14 @@
 import { PasswordResetForm } from "@/components/password-reset-form";
 import { redirect } from "next/navigation";
 
-const UpdatePasswordPage = async () => {
-  const searchParams = new URLSearchParams(
-    typeof window === "undefined" ? "" : window.location.search
-  ) as URLSearchParams;
+interface UpdatePasswordPageProps {
+  searchParams: { [key: string]: string | string[] | undefined };
+}
 
-  if (!searchParams.get("token_hash") || !searchParams.get("type")) {
+const UpdatePasswordPage = async ({
+  searchParams,
+}: UpdatePasswordPageProps) => {
+  if (!searchParams.token_hash || !searchParams.type) {
     redirect("/");
   }
   return (

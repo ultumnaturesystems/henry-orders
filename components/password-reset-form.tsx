@@ -22,7 +22,7 @@ export function PasswordResetForm({
 }: React.ComponentProps<"div">) {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [success, setSuccess] = useState(true);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,7 +71,7 @@ export function PasswordResetForm({
                       type="button"
                       tabIndex={-1}
                       onClick={() => setShowNewPassword((v) => !v)}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground  cursor-pointer"
                       aria-label={
                         showNewPassword ? "Hide password" : "Show password"
                       }
@@ -94,7 +94,7 @@ export function PasswordResetForm({
                       type="button"
                       tabIndex={-1}
                       onClick={() => setShowConfirmPassword((v) => !v)}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground  cursor-pointer"
                       aria-label={
                         showConfirmPassword ? "Hide password" : "Show password"
                       }
@@ -107,7 +107,7 @@ export function PasswordResetForm({
                     </button>
                   </div>
                 </div>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full cursor-pointer">
                   Update Password
                 </Button>
               </div>
@@ -126,8 +126,14 @@ const UpdatedPasswordSuccess = () => {
         <p className="text-sm text-muted-foreground">
           Your password has been updated successfully.
         </p>
-        <Button variant="outline" onClick={() => window.location.reload()}>
-          <a href="/login">Return to Home</a>
+
+        <Button
+          variant="outline"
+          onClick={() => {
+            window.location.href = "/login";
+          }}
+        >
+          Return to Home
         </Button>
       </div>
     </Card>
