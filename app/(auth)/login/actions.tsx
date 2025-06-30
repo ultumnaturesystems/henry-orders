@@ -12,12 +12,10 @@ export async function login(formData: { email: string; password: string }) {
   // in practice, you should validate your inputs
   const { error } = await supabase.auth.signInWithPassword(formData);
 
-  if (error) {
-    redirect("/error");
-  }
+  if (error) return { error: error.message };
 
-  //revalidatePath("/", "layout");
-  return;
+  revalidatePath("/", "layout");
+  redirect("/");
 }
 export async function signup(formData: FormData) {
   const supabase = await createClient();
