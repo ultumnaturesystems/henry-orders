@@ -16,7 +16,7 @@ import { Check } from "lucide-react";
 import { forgotPassword } from "@/app/(auth)/forgot-password/actions";
 import { useState } from "react";
 
-export function ForgotPasswordForm({
+export function PasswordResetRequestForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
