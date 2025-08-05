@@ -23,7 +23,7 @@ export function DataTablePagination<TData>({
   table,
 }: DataTablePaginationProps<TData>) {
   return (
-    <div className="flex flex-col space-y-4 px-2 py-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+    <div className="flex flex-col space-y-4 px-2 py-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 sticky bottom-0 sm:static bg-background z-10 border-t">
       {/* Row selection info - Hidden on mobile when no rows selected */}
       <div className="text-muted-foreground text-sm">
         <span className="hidden sm:inline">
