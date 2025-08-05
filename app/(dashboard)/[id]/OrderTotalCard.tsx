@@ -48,7 +48,7 @@ const OrderTotalCard = ({ order }: OrderTotalCardProps) => {
   return (
     <Card className="gap-3">
       <CardContent>
-        <Table>
+        <Table className="min-w-0">
           <TableHeader />
           <TableBody>
             <TableRow>
