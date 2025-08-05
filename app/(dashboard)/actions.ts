@@ -60,7 +60,6 @@ export async function fetchOrders() {
 
     // const responseData = (await response.json()) as OrdersResponse;
     // const orders = responseData.data.orders.edges.map((edge) => edge.node);
-    // console.log("Fetched orders:", orders);
     // return orders;
 
     const { data, errors } = await client.request(operation);
