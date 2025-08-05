@@ -55,8 +55,8 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
             </div>
           </section>
         )}
-        <Table>
-          <TableBody>
+        <Table className="min-w-0">
+          <TableBody className="">
             {lineItems.map((lineItem) => {
               const {
                 image,
@@ -79,16 +79,17 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
                 hasLineItemLevelDiscount(discountAllocations);
 
               return (
-                <TableRow key={lineItem.id}>
-                  <TableCell>
-                    <div className="flex justify-center w-full">
+                <TableRow
+                  key={lineItem.id}
+                  className="flex flex-col sm:flex-row justify-between"
+                >
+                  <TableCell className="flex gap-2 items-center">
+                    <div className="flex justify-center">
                       <div className="rounded-lg border border-gray-200">
                         <LineItemImage image={image} />
                       </div>
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col justify-center h-full">
+                    <div className="flex flex-col h-full">
                       <span className="font-semibold">{title}</span>
                       {variantTitle !== "Default Title" && (
                         <Badge variant="secondary" className="bg-gray-200">
@@ -99,7 +100,7 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
                         discountAllocations.map(
                           ({ discountApplication: { value } }, index) => (
                             <div
-                              className="flex gap-1 items-center text-sm text-muted-foreground"
+                              className="flex gap-1 items-center text-xs text-muted-foreground"
                               key={`${value.__typename}-${index}`}
                             >
                               <BadgeDollarSign size="16" />
@@ -113,19 +114,18 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
                         )}
                     </div>
                   </TableCell>
-                  <TableCell className="text-end">
-                    <LineItemDiscountedPrice lineItem={lineItem} />
-                  </TableCell>
-                  <TableCell>x</TableCell>
-                  <TableCell
-                    style={{ textAlign: "center" }}
-                  >{`${quantity}`}</TableCell>
-                  <TableCell className="text-right">
-                    {new Intl.NumberFormat("en-US", {
-                      style: "currency",
-                      currency:
-                        originalUnitPriceSet.presentmentMoney?.currencyCode,
-                    }).format(amount)}
+                  <TableCell className="flex justify-between items-center gap-8 text-sm">
+                    <span className="pl-16 sm:pl-0">
+                      <LineItemDiscountedPrice lineItem={lineItem} /> x{" "}
+                      {quantity}
+                    </span>
+                    <span>
+                      {new Intl.NumberFormat("en-US", {
+                        style: "currency",
+                        currency:
+                          originalUnitPriceSet.presentmentMoney?.currencyCode,
+                      }).format(amount)}
+                    </span>
                   </TableCell>
                 </TableRow>
               );
