@@ -114,7 +114,7 @@ const LineItemsCard = ({ itemGroup }: LineItemsCardProps) => {
                         )}
                     </div>
                   </TableCell>
-                  <TableCell className="flex justify-between items-center gap-8 text-sm">
+                  <TableCell className="flex justify-between items-center gap-8 text-sm sm:min-w-[200px]">
                     <span className="pl-16 sm:pl-0">
                       <LineItemDiscountedPrice lineItem={lineItem} /> x{" "}
                       {quantity}
