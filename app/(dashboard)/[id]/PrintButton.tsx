@@ -11,7 +11,6 @@ const PrintButton = ({ order }: PrintButtonProps) => {
   const handlePrint = () => {
     const printContent = document.getElementById("invoice-details")?.innerHTML;
     if (!printContent) return;
-    console.log("Printing order:", order.name);
     const printWindow = window.open("", "_blank");
     if (printWindow) {
       printWindow.document.write(`
@@ -29,7 +28,7 @@ const PrintButton = ({ order }: PrintButtonProps) => {
               line-height: 1.4;
               color: #000;
             }
-             table { 
+            table { 
               border-collapse: collapse; 
               width: 100%; 
             }

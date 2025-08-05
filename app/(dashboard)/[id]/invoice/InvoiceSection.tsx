@@ -45,7 +45,7 @@ const InvoiceSection = ({ order }: InvoiceSectionProps) => {
             </span>
           </section>
         </div>
-        <div className="flex flex-col mr-2 items-end">
+        <div className=" flex flex-col mr-2 items-end">
           <Image
             src={BlackUNSLogo}
             alt="UNS Logo"
