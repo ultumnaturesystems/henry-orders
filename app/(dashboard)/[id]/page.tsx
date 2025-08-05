@@ -24,6 +24,9 @@ const OrderSlugPage = async ({
 }) => {
   const { id } = await params;
   const order = await fetchOrderById(id);
+  const financialStatus = financialStatusVariant[order.displayFinancialStatus];
+  const fulfillmentStatus =
+    fulfillmentStatusVariant[order.displayFulfillmentStatus];
   const itemGroups = splitFulfilledLineItems(order);
   return (
     <div className="max-w-6xl mx-auto py-5 space-y-4 px-4 sm:px-6">
@@ -39,20 +42,24 @@ const OrderSlugPage = async ({
             <div className="flex flex-wrap gap-2">
               <Badge
                 variant="outline"
-                style={financialStatusVariant[order.displayFinancialStatus]}
+                style={financialStatus}
                 className="text-xs sm:text-sm"
               >
-                {order.displayFinancialStatus}
+                {financialStatus.label}
               </Badge>
               <Badge
                 variant="secondary"
-                style={fulfillmentStatusVariant[order.displayFulfillmentStatus]}
+                style={fulfillmentStatus}
                 className="text-xs sm:text-sm"
               >
-                {order.displayFulfillmentStatus}
+                {fulfillmentStatus.label}
               </Badge>
               {order.closed && (
-                <Badge variant="outline" className="text-xs sm:text-sm">
+                <Badge
+                  variant="outline"
+                  style={{ background: "rgba(0, 0, 0, 0.05)" }}
+                  className="text-xs sm:text-sm"
+                >
                   Archived
                 </Badge>
               )}

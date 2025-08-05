@@ -212,7 +212,7 @@ export const financialStatusVariant: Record<
   DisplayFinancialStatus,
   { label: string; backgroundColor: string }
 > = {
-  PAID: { label: "Paid", backgroundColor: "" },
+  PAID: { label: "Paid", backgroundColor: "rgba(0, 0, 0, 0.05)" },
   PARTIALLY_PAID: {
     label: "Partially Paid",
     backgroundColor: "rgba(255, 214, 164, 1)",
@@ -227,17 +227,17 @@ export const financialStatusVariant: Record<
   },
   PARTIALLY_REFUNDED: {
     label: "Partially Refunded",
-    backgroundColor: "",
+    backgroundColor: "rgba(0, 0, 0, 0.05)",
   },
-  REFUNDED: { label: "Refunded", backgroundColor: "" },
-  VOIDED: { label: "Voided", backgroundColor: "" },
+  REFUNDED: { label: "Refunded", backgroundColor: "rgba(0, 0, 0, 0.05)" },
+  VOIDED: { label: "Voided", backgroundColor: "rgba(0, 0, 0, 0.05)" },
 };
 
 export const fulfillmentStatusVariant: Record<
   DisplayFulfillmentStatus,
   { label: string; backgroundColor: string }
 > = {
-  FULFILLED: { label: "Fulfilled", backgroundColor: "white" },
+  FULFILLED: { label: "Fulfilled", backgroundColor: "rgba(0, 0, 0, 0.05)" },
   PARTIALLY_FULFILLED: {
     label: "Partially Fulfilled",
     backgroundColor: "rgba(255, 214, 164, 1)",
