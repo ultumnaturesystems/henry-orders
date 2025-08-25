@@ -1,6 +1,5 @@
 "use server";
 
-import { OrdersResponse } from "@/utils/shopify/types";
 import { client } from "@/utils/shopify/client";
 export async function fetchOrders() {
   try {
@@ -43,24 +42,6 @@ export async function fetchOrders() {
                 }
             }
         `;
-
-    //   const response = await fetch(process.env.SHOPIFY_CHANNEL_URL!, {
-    //   method: "POST",
-    //   headers: {
-    //     "X-Shopify-Access-Token": process.env.SHOPIFY_ACCESS_TOKEN!,
-    //     "Content-Type": "application/json",
-    //     "Access-Control-Allow-Origin": "*",
-    //   },
-    //   body: JSON.stringify({ query: operation }),
-    // });
-
-    // if (!response.ok) {
-    //   throw new Error(`HTTP error! status: ${response.status}`);
-    // }
-
-    // const responseData = (await response.json()) as OrdersResponse;
-    // const orders = responseData.data.orders.edges.map((edge) => edge.node);
-    // return orders;
 
     const { data, errors } = await client.request(operation);
     if (errors) {
